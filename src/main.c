@@ -40,10 +40,10 @@ int main()
     Image *button3 = image_load("/assets/img/quit.png");
 
     // drawing the images
-    image_draw(background, 0, 0, 640, 480);
-    image_draw(button1, 125, 200, 50, 50);
-    image_draw(button2, 150, 200, 50, 50);
-    image_draw(button3, 175, 200, 50, 50);
+    image_draw(background, 0, 0, 640, 480); // x , y , width , height
+    image_draw(button1, 125, 200, 50, 50);  // x , y , width , height
+    image_draw(button2, 150, 200, 50, 50);  // x , y , width , height
+    image_draw(button3, 175, 200, 50, 50);  // x , y , width , height
 
     // free memory section
     SDL_Delay(5000);
