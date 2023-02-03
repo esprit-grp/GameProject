@@ -10,7 +10,8 @@
 // including the headers
 #include "image.h"
 
-SDL_Surface *screen;                   // the screen
+SDL_Surface *screen; // the screen
+
 Mix_Music *music;                      // the music
 Mix_Chunk *sound;                      // the sound
 TTF_Font *font;                        // the font
@@ -32,11 +33,21 @@ int main()
     // inisializing the screen
     screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
 
-    Image *image = image_load("/assets/img/test.png");
-    image_draw(image, 100, 100);
-    image_free(image);
+    // loading the images
+    Image *background = image_load("/assets/img/background.png");
+    Image *button1 = image_load("/assets/img/play.png");
+    Image *button2 = image_load("/assets/img/settings.png");
+    Image *button3 = image_load("/assets/img/quit.png");
 
+    // drawing the images
+    image_draw(background, 0, 0, 640, 480); // x , y , width , height
+    image_draw(button1, 125, 200, 50, 50);  // x , y , width , height
+    image_draw(button2, 150, 200, 50, 50);  // x , y , width , height
+    image_draw(button3, 175, 200, 50, 50);  // x , y , width , height
+
+    // free memory section
     SDL_Delay(5000);
+    image_free(background);
     SDL_Quit();
     return 0;
 }
