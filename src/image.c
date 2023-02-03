@@ -26,6 +26,7 @@ void image_free(Image *image)
 
 void image_draw(Image *image, int x, int y)
 {
+    SDL_Surface *screen;
     // Draw the image on the screen
     SDL_Rect rect;
     rect.x = x;

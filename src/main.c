@@ -11,9 +11,6 @@
 #include "image.h"
 
 SDL_Surface *screen;                   // the screen
-image *background;                     // the background
-image *player;                         // the player
-image *enemy;                          // the enemy
 Mix_Music *music;                      // the music
 Mix_Chunk *sound;                      // the sound
 TTF_Font *font;                        // the font
@@ -25,7 +22,7 @@ char scoreText[20];                    // the score text
 int loop = 1;                          // the loop variable
 
 // inisializing the SDL
-void main()
+int main()
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) == -1)
     {
