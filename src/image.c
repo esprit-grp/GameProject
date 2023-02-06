@@ -5,8 +5,8 @@
 // load the images
 void imageLoad_background(image *img)
 {
-    img->filename = "../img/background.png";
-    img = IMG_Load(img->filename);
+    img->filename = "../assets/img/background.bmp";
+    img->img = SDL_LoadBMP(img->filename);
     if (img->img == NULL)
     {
         printf("unable to load background Error: %s.\n", IMG_GetError());
@@ -22,8 +22,8 @@ void imageLoad_background(image *img)
 
 void imageLoad_playbutton(image *img)
 {
-    img->filename = "../img/play.png";
-    img = IMG_Load(img->filename);
+    img->filename = "../assets/img/play.bmp";
+    img->img = SDL_LoadBMP(img->filename);
     if (img->img == NULL)
     {
         printf("unable to load play button Error: %s.\n", IMG_GetError());
@@ -39,8 +39,8 @@ void imageLoad_playbutton(image *img)
 
 void imageLoad_settingsbutton(image *img)
 {
-    img->filename = "../img/settings.png";
-    img = IMG_Load(img->filename);
+    img->filename = "../assets/img/settings.bmp";
+    img->img = SDL_LoadBMP(img->filename);
     if (img->img == NULL)
     {
         printf("unable to load settings button Error: %s.\n", IMG_GetError());
@@ -57,8 +57,8 @@ void imageLoad_settingsbutton(image *img)
 void imageLoad_quitbutton(image *img)
 
 {
-    img->filename = "../img/quit.png";
-    img = IMG_Load(img->filename);
+    img->filename = "../assets/img/quit.bmp";
+    img->img = SDL_LoadBMP(img->filename);
     if (img->img == NULL)
     {
         printf("unable to load quit button Error: %s.\n", IMG_GetError());

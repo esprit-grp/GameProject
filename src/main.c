@@ -8,7 +8,7 @@
 #include <SDL/SDL_mixer.h> //for loading sounds
 
 // including the headers
-#include "image.h"
+#include "../include/image.h"
 
 // images
 SDL_Surface *screen;
