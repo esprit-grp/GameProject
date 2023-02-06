@@ -1,0 +1,1 @@
+SDL_Rect img_size; // the size of the image (width and height) to know how to animate if we have sprite sheet images
