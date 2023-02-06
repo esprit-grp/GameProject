@@ -9,13 +9,18 @@
 
 // including the headers
 #include "../include/image.h"
+#include "../include/music.h"
 
 // images
 SDL_Surface *screen;
 image background;
-image playButton; // TODO: add hover effect
+image playButton;
 image settingsButton;
 image exitButton;
+
+// music
+Mix_Music *music;
+Mix_Chunk *FX;
 
 // logic
 SDL_Event event;
@@ -42,6 +47,7 @@ int main()
     imageLoad_playbutton(&playButton);
     imageLoad_settingsbutton(&settingsButton);
     imageLoad_quitbutton(&exitButton);
+    musicLoad(music);
     // game loop
     while (loop)
     {
@@ -49,6 +55,19 @@ int main()
         imageDraw_playbutton(screen, playButton);
         imageDraw_settingsbutton(screen, settingsButton);
         imageDraw_quitbutton(screen, exitButton);
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+            case SDL_QUIT:
+                loop = 0;
+                break;
+
+            default:
+                break;
+            }
+        }
+
         // refreshing the screen
         SDL_Flip(screen);
     }
