@@ -1,15 +1,27 @@
 #ifndef IMAGE_H
+
 #define IMAGE_H
-
-typedef struct Image
+#define SCREEN_W 800
+#define SCREEN_H 600 // screen height and width
+typedef struct
 {
-    int width;
-    int height;
-    Uint32 *pixels;
-} Image;
 
-Image *image_load(const char *filename);     // loading the image from hard drive
-void image_free(Image *image);               // freeing the image from memory
-void image_draw(Image *image, int x, int y); // drawing the image on the screen
+    char *filename;    // the filename of the image (url)
+    SDL_Rect img_pos;  // the position of the image
+    SDL_Rect img_size; // the size of the image (width and height) to know how to animate if we have sprite sheet images
+    SDL_Surface *img;  // pointer to the image
+} image;
+
+void imageLoad_background(image *img);
+void imageLoad_playbutton(image *img);
+void imageLoad_settingsbutton(image *img);
+void imageLoad_quitbutton(image *img);
+
+void imageDraw_background(SDL_Surface *screen, image img);
+void imageDraw_playbutton(SDL_Surface *screen, image img);
+void imageDraw_settingsbutton(SDL_Surface *screen, image img);
+void imageDraw_quitbutton(SDL_Surface *screen, image img);
+
+void imageFree_background(image *img);
 
 #endif
