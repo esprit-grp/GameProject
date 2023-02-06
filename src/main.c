@@ -10,40 +10,48 @@
 // including the headers
 #include "image.h"
 
-// global variables
+// images
 SDL_Surface *screen;
-image *background;
-image *startButton; // TODO: add hover effect
-image *settingsButton;
-image *exitButton;
-int loop = 1;
+image background;
+image playButton; // TODO: add hover effect
+image settingsButton;
+image exitButton;
 
+// logic
+SDL_Event event;
+int loop = 1;
 int main()
 {
     // initializing SDL
-    if (SDL_Init(SDL_INIT_VIDEO) != -1)
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
-        printf("SDL_Init video Error: %s.\n", SDL_GetError());
-        return 1;
-    }
-    if (SDL_Init(SDL_INIT_AUDIO) != -1)
-    {
-        printf("SDL_Init audio Error: %s.\n", SDL_GetError());
-        return 1;
-    }
-    if (SDL_Init(SDL_INIT_TIMER) != -1)
-    {
-        printf("SDL_Init timer Error: %s.\n", SDL_GetError());
+        printf("SDL_Init Error: %s.\n", SDL_GetError());
         return 1;
     }
 
     // creating the window
-    screen = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+    screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+    if (screen == NULL)
+    {
+        printf("Error creating the screen: %s\n", SDL_GetError());
+        return 1;
+    }
 
-    image_load(background, "../assets/img/play.png", 0, 0, 0, 0); // var, filename, x, y, w, h
-    draw_image(*screen, *background);                             // var, image
-
-    // free memory section
+    // loading images
+    imageLoad_background(&background);
+    imageLoad_playbutton(&playButton);
+    imageLoad_settingsbutton(&settingsButton);
+    imageLoad_quitbutton(&exitButton);
+    // game loop
+    while (loop)
+    {
+        imageDraw_background(screen, background);
+        imageDraw_playbutton(screen, playButton);
+        imageDraw_settingsbutton(screen, settingsButton);
+        imageDraw_quitbutton(screen, exitButton);
+        // refreshing the screen
+        SDL_Flip(screen);
+    }
     SDL_Delay(5000);
     SDL_Quit();
     return 0;

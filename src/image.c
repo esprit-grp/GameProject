@@ -1,27 +1,99 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include "image.h"
+#include "../include/image.h"
 
-void image_load(image *img, char *filename, int x, int y, int w, int h)
+// load the images
+void imageLoad_background(image *img)
 {
-    img->filename = filename; // This sets the image's filename to the given filename parameter.
-    img->img = IMG_Load(img->filename);
+    img->filename = "../img/background.png";
+    img = IMG_Load(img->filename);
     if (img->img == NULL)
     {
-        printf("IMG_Load Error: %s.\n", IMG_GetError());
+        printf("unable to load background Error: %s.\n", IMG_GetError());
         return;
     }
-
-    // This code sets the image's position, size, and width and height.
-    img->img_pos.x = x;               // This sets the image position's x coordinate to the given x parameter.
-    img->img_pos.y = y;               // This sets the image position's y coordinate to the given y parameter.
-    img->img_size.w = w;              // This sets the image size's width to the given w parameter.
-    img->img_size.h = h;              // This sets the image size's height to the given h parameter.
-    img->img_pos.w = img->img_size.w; // This sets the image's width to the image size's width.
-    img->img_pos.h = img->img_size.h; // This sets the image's height to the image size's height.
+    img->img_pos.x = 0;
+    img->img_pos.y = 0;
+    img->img_size.x = 0;
+    img->img_size.y = 0;
+    img->img_size.w = SCREEN_W;
+    img->img_size.h = SCREEN_H;
 }
 
-void draw_image(SDL_Surface *screen, image img)
+void imageLoad_playbutton(image *img)
+{
+    img->filename = "../img/play.png";
+    img = IMG_Load(img->filename);
+    if (img->img == NULL)
+    {
+        printf("unable to load play button Error: %s.\n", IMG_GetError());
+        return;
+    }
+    img->img_size.x = 0;
+    img->img_size.y = 0;
+    img->img_size.w = 238;
+    img->img_size.h = 58;
+    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2);
+    img->img_pos.y = ((SCREEN_W - img->img_size.h) / 3);
+}
+
+void imageLoad_settingsbutton(image *img)
+{
+    img->filename = "../img/settings.png";
+    img = IMG_Load(img->filename);
+    if (img->img == NULL)
+    {
+        printf("unable to load settings button Error: %s.\n", IMG_GetError());
+        return;
+    }
+    img->img_size.x = 0;
+    img->img_size.y = 0;
+    img->img_size.w = 237;
+    img->img_size.h = 58;
+    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2);
+    img->img_pos.y = ((SCREEN_W - img->img_size.h) / 3);
+}
+
+void imageLoad_quitbutton(image *img)
+
+{
+    img->filename = "../img/quit.png";
+    img = IMG_Load(img->filename);
+    if (img->img == NULL)
+    {
+        printf("unable to load quit button Error: %s.\n", IMG_GetError());
+        return;
+    }
+    img->img_size.x = 0;
+    img->img_size.y = 0;
+    img->img_size.w = 236;
+    img->img_size.h = 55;
+    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2);
+    img->img_pos.y = ((SCREEN_W - img->img_size.h) / 3);
+}
+
+// draw the images
+void imageDraw_background(SDL_Surface *screen, image img)
 {
     SDL_BlitSurface(img.img, &img.img_size, screen, &img.img_pos);
+}
+void imageDraw_playbutton(SDL_Surface *screen, image img)
+{
+    SDL_BlitSurface(img.img, NULL, screen, &img.img_pos);
+}
+
+void imageDraw_settingsbutton(SDL_Surface *screen, image img)
+{
+    SDL_BlitSurface(img.img, NULL, screen, &img.img_pos);
+}
+
+void imageDraw_quitbutton(SDL_Surface *screen, image img)
+{
+    SDL_BlitSurface(img.img, NULL, screen, &img.img_pos);
+}
+
+// free the images
+void imageFree_background(image *img)
+{
+    SDL_FreeSurface(img->img);
 }
