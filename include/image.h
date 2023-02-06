@@ -1,15 +1,14 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-typedef struct Image
+typedef struct
 {
-    int width;
-    int height;
-    Uint32 *pixels;
-} Image;
+    char *filename;    // the filename of the image (url)
+    SDL_Rect img_pos;  // the position of the image
+    SDL_Rect img_size; // the size of the image
+    SDL_Surface *img;  // pointer to the image
+} image;
 
-Image *image_load(const char *filename);     // loading the image from hard drive
-void image_free(Image *image);               // freeing the image from memory
-void image_draw(Image *image, int x, int y); // drawing the image on the screen
-
+void image_load(image *img, char *filename, int x, int y, int w, int h); // var, filename, x, y, w, h
+void draw_image(SDL_Surface *screen, image img);
 #endif

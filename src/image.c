@@ -2,36 +2,26 @@
 #include <SDL/SDL_image.h>
 #include "image.h"
 
-Image *image_load(const char *filename)
+void image_load(image *img, char *filename, int x, int y, int w, int h)
 {
-    Image *image = (Image *)malloc(sizeof(Image)); // allocating memory for the image
-
-    SDL_Surface *surface = IMG_Load(filename); // loading the image from hard drive
-    if (!surface)
+    img->filename = filename; // This sets the image's filename to the given filename parameter.
+    img->img = IMG_Load(img->filename);
+    if (img->img == NULL)
     {
-        printf("error: %s\n", IMG_GetError()); // error handling
+        printf("IMG_Load Error: %s.\n", IMG_GetError());
+        return;
     }
 
-    image->width = surface->w; // setting the width and height of the image
-    image->height = surface->h;
-    image->pixels = (Uint32 *)surface->pixels; // setting the pixels of the image //TODO: check if this is correct
-
-    return image;
+    // This code sets the image's position, size, and width and height.
+    img->img_pos.x = x;               // This sets the image position's x coordinate to the given x parameter.
+    img->img_pos.y = y;               // This sets the image position's y coordinate to the given y parameter.
+    img->img_size.w = w;              // This sets the image size's width to the given w parameter.
+    img->img_size.h = h;              // This sets the image size's height to the given h parameter.
+    img->img_pos.w = img->img_size.w; // This sets the image's width to the image size's width.
+    img->img_pos.h = img->img_size.h; // This sets the image's height to the image size's height.
 }
 
-void image_free(Image *image) // freeing the image from memory
+void draw_image(SDL_Surface *screen, image img)
 {
-    free(image);
-}
-
-void image_draw(Image *image, int x, int y, int w, int h)
-{
-    SDL_Surface *screen;
-    // Draw the image on the screen
-    SDL_Rect rect; // creating a rectangle
-    rect.x = x;    // setting the x and y coordinates of the rectangle
-    rect.y = y;
-    rect.w = w; // setting the width and height of the rectangle
-    rect.h = h;
-    SDL_BlitSurface((SDL_Surface *)image, NULL, screen, &rect); // drawing the image on the screen
+    SDL_BlitSurface(img.img, &img.img_size, screen, &img.img_pos);
 }
