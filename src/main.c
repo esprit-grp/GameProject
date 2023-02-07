@@ -47,6 +47,7 @@ int main()
     imageLoad_playbutton(&playButton);
     imageLoad_settingsbutton(&settingsButton);
     imageLoad_quitbutton(&exitButton);
+    // loading music
     musicLoad(music);
     // game loop
     while (loop)
