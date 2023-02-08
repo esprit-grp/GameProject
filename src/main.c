@@ -72,7 +72,99 @@ int main()
         // refreshing the screen
         SDL_Flip(screen);
     }
+
+
+
+// heni changes
+
+
+int main(int argc, char *argv[]) {
+    SDL_Surface *screen;
+    SDL_Rect rect;
+    SDL_Event event;
+
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        fprintf(stderr, "Unable to initialize SDL: %s\n", SDL_GetError());
+        return 1;
+    }
+
+    // Set up the screen
+    screen = SDL_SetVideoMode(640, 480, 0, SDL_HWSURFACE|SDL_DOUBLEBUF);
+    if (screen == NULL) {
+        fprintf(stderr, "Unable to set video mode: %s\n", SDL_GetError());
+        return 1;
+    }
+
+    // Set the initial position of the character rectangle
+    rect.x = 320;
+    rect.y = 240;
+    rect.w = 40;
+    rect.h = 40;
+
+    // Main event loop
+    while (1) {
+        // Handle events
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym) {
+                        case SDLK_UP:
+                            rect.y -= 10;
+                            break;
+                        case SDLK_DOWN:
+                            rect.y += 10;
+                            break;
+                        case SDLK_LEFT:
+                            rect.x -= 10;
+                            break;
+                        case SDLK_RIGHT:
+                            rect.x += 10;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case SDL_QUIT:
+                    return 0;
+                default:
+                    break;
+            }
+        }
+
+        // Clear the screen
+        SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
+
+        // Draw the character rectangle
+        SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, 255, 0, 0));
+
+        // Update the screen
+        SDL_Flip(screen);
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     SDL_Delay(5000);
     SDL_Quit();
+
+
     return 0;
 }
