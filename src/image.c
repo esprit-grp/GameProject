@@ -2,11 +2,13 @@
 #include <SDL/SDL_image.h>
 #include "../include/image.h"
 
+spacing = 14; // spacing between the buttons (px)
+
 // load the images
 void imageLoad_background(image *img)
 {
-    img->filename = "../assets/img/background.bmp";
-    img->img = SDL_LoadBMP(img->filename);
+    img->filename = "../assets/img/background.png";
+    img->img = IMG_Load(img->filename);
     if (img->img == NULL)
     {
         printf("unable to load background Error: %s.\n", IMG_GetError());
@@ -22,8 +24,8 @@ void imageLoad_background(image *img)
 
 void imageLoad_playbutton(image *img)
 {
-    img->filename = "../assets/img/play.bmp";
-    img->img = SDL_LoadBMP(img->filename);
+    img->filename = "../assets/img/playbutton.png";
+    img->img = IMG_Load(img->filename);
     if (img->img == NULL)
     {
         printf("unable to load play button Error: %s.\n", IMG_GetError());
@@ -31,16 +33,16 @@ void imageLoad_playbutton(image *img)
     }
     img->img_size.x = 0;
     img->img_size.y = 0;
-    img->img_size.w = 238;
-    img->img_size.h = 58;
-    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2);
-    img->img_pos.y = ((SCREEN_W - img->img_size.h) / 3);
+    img->img_size.w = img->img->w;
+    img->img_size.h = img->img->h;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
+    img->img_pos.y = 400;
 }
 
 void imageLoad_settingsbutton(image *img)
 {
-    img->filename = "../assets/img/settings.bmp";
-    img->img = SDL_LoadBMP(img->filename);
+    img->filename = "../assets/img/menu.png";
+    img->img = IMG_Load(img->filename);
     if (img->img == NULL)
     {
         printf("unable to load settings button Error: %s.\n", IMG_GetError());
@@ -48,17 +50,16 @@ void imageLoad_settingsbutton(image *img)
     }
     img->img_size.x = 0;
     img->img_size.y = 0;
-    img->img_size.w = 237;
-    img->img_size.h = 58;
-    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2);
-    img->img_pos.y = ((SCREEN_W - img->img_size.h) / 3);
+    img->img_size.w = img->img->w;
+    img->img_size.h = img->img->h;
+    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2) - (img->img_size.w / 2);
+    img->img_pos.y = 400 + img->img_size.h + spacing;
 }
 
 void imageLoad_quitbutton(image *img)
-
 {
-    img->filename = "../assets/img/quit.bmp";
-    img->img = SDL_LoadBMP(img->filename);
+    img->filename = "../assets/img/exit.png";
+    img->img = IMG_Load(img->filename);
     if (img->img == NULL)
     {
         printf("unable to load quit button Error: %s.\n", IMG_GetError());
@@ -66,10 +67,10 @@ void imageLoad_quitbutton(image *img)
     }
     img->img_size.x = 0;
     img->img_size.y = 0;
-    img->img_size.w = 236;
-    img->img_size.h = 55;
-    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2);
-    img->img_pos.y = ((SCREEN_W - img->img_size.h) / 3);
+    img->img_size.w = img->img->w;
+    img->img_size.h = img->img->h;
+    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2) - (img->img_size.w / 2);
+    img->img_pos.y = 400 * 2 + img->img_size.h * 2 + spacing * 2;
 }
 
 // draw the images
@@ -93,7 +94,7 @@ void imageDraw_quitbutton(SDL_Surface *screen, image img)
 }
 
 // free the images
-void imageFree_background(image *img)
+void imageFree_background(image img)
 {
-    SDL_FreeSurface(img->img);
+    SDL_FreeSurface(img.img);
 }

@@ -1,8 +1,8 @@
 #ifndef IMAGE_H
-
 #define IMAGE_H
-#define SCREEN_W 800
-#define SCREEN_H 600 // screen height and width
+
+#define SCREEN_W 1280
+#define SCREEN_H 720 // screen height and width
 typedef struct
 {
 
@@ -22,6 +22,6 @@ void imageDraw_playbutton(SDL_Surface *screen, image img);
 void imageDraw_settingsbutton(SDL_Surface *screen, image img);
 void imageDraw_quitbutton(SDL_Surface *screen, image img);
 
-void imageFree_background(image *img);
+void imageFree_background(image img);
 
 #endif
