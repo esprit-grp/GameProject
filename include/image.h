@@ -1,8 +1,8 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#define SCREEN_W 800
-#define SCREEN_H 600 // screen height and width
+#define SCREEN_W 1280
+#define SCREEN_H 720 // screen height and width
 typedef struct
 {
 
