@@ -10,7 +10,7 @@
 // including the headers
 #include "../include/image.h"
 #include "../include/music.h"
-
+//heni
 // images
 SDL_Surface *screen;
 image background;
