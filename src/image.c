@@ -70,7 +70,7 @@ void imageLoad_quitbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2) - (img->img_size.w / 2);
-    img->img_pos.y = 400 * 2 + img->img_size.h * 2 + spacing * 2;
+    img->img_pos.y = 400 + img->img_size.h * 2 + spacing * 2;
 }
 
 // draw the images
@@ -94,7 +94,7 @@ void imageDraw_quitbutton(SDL_Surface *screen, image img)
 }
 
 // free the images
-void imageFree_background(image img)
+void imageFree(image img)
 {
     SDL_FreeSurface(img.img);
 }
