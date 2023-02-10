@@ -23,7 +23,7 @@ void musicLoad(Mix_Music *music)
 void FXLoad(Mix_Chunk *FX)
 {
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1;
-    FX = Mix_LoadWAV("../assets/audio/FX.wav"); // wav file
+    FX = Mix_LoadWAV("../assets/audio/click.wav"); // wav file
     if (FX == NULL)
     {
         printf("unable to load FX Error: %s.\n", Mix_GetError());

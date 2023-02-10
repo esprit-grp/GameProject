@@ -94,7 +94,7 @@ void imageDraw_quitbutton(SDL_Surface *screen, image img)
 }
 
 // free the images
-void imageFree_background(image img)
+void imageFree(image img)
 {
     SDL_FreeSurface(img.img);
 }
