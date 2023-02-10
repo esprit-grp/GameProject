@@ -9,7 +9,7 @@ void musicLoad(Mix_Music *music)
     {
         printf("%s", Mix_GetError());
     }
-    music = Mix_LoadMUS("../assets/music/music.mp3"); // mp3 file
+    music = Mix_LoadMUS("../assets/audio/music.mp3"); // mp3 file
     if (music == NULL)
     {
         printf("unable to load music Error: %s.\n", Mix_GetError());
@@ -23,7 +23,7 @@ void musicLoad(Mix_Music *music)
 void FXLoad(Mix_Chunk *FX)
 {
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1;
-    FX = Mix_LoadWAV("../assets/music/FX.wav"); // wav file
+    FX = Mix_LoadWAV("../assets/audio/click.wav"); // wav file
     if (FX == NULL)
     {
         printf("unable to load FX Error: %s.\n", Mix_GetError());

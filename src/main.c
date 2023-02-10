@@ -10,6 +10,7 @@
 // including the headers
 #include "../include/image.h"
 #include "../include/music.h"
+#include "../include/text.h"
 
 // images
 SDL_Surface *screen;
@@ -20,11 +21,21 @@ image exitButton;
 
 // music
 Mix_Music *music;
-Mix_Chunk *FX;
+Mix_Chunk *clickFX;
+
+// text
+text score;
 
 // logic
 SDL_Event event;
 int loop = 1;
+
+/*
+********************
+*****GAME BEGIN*****
+********************
+*/
+
 int main()
 {
     // initializing SDL
@@ -47,20 +58,43 @@ int main()
     imageLoad_playbutton(&playButton);
     imageLoad_settingsbutton(&settingsButton);
     imageLoad_quitbutton(&exitButton);
+
     // loading music
     musicLoad(music);
-    // game loop
+
+    // loading text
+    textLoad(&score);
+
+    /*
+     ********************
+     *****GAME LOOP******
+     ********************
+     */
+
     while (loop)
     {
+        // drawing images
         imageDraw_background(screen, background);
         imageDraw_playbutton(screen, playButton);
         imageDraw_settingsbutton(screen, settingsButton);
         imageDraw_quitbutton(screen, exitButton);
+
+        // drawing text
+        textDraw(screen, score, "Score: 0");
+
+        // events
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
             {
-            case SDL_QUIT:
+            case SDL_MOUSEMOTION:
+                if (event.motion.x >= playButton.img_pos.x && event.motion.x <= playButton.img_pos.x + playButton.img_size.w && event.motion.y >= playButton.img_pos.y && event.motion.y <= playButton.img_pos.y + playButton.img_size.h)
+                {
+                    FXLoad(clickFX);
+                }
+                break;
+
+            case SDL_QUIT: // if the user clicks on the close button
                 loop = 0;
                 break;
 
@@ -69,10 +103,17 @@ int main()
             }
         }
 
-        // refreshing the screen
+        // rereshing the screen
         SDL_Flip(screen);
     }
-    SDL_Delay(5000);
+
+    // freeing memory
+    imageFree(&background);
+    imageFree(&playButton);
+    imageFree(&settingsButton);
+    imageFree(&exitButton);
+    musicFree(music);
+
     SDL_Quit();
     return 0;
 }
