@@ -2,7 +2,8 @@
 #include <SDL/SDL_image.h>
 #include "../include/image.h"
 
-spacing = 14; // spacing between the buttons (px)
+spacing = 14;    // spacing between the buttons (px)
+initial_y = 350; // intitial y pos
 
 // load the images
 void imageLoad_background(image *img)
@@ -36,7 +37,7 @@ void imageLoad_playbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = 400;
+    img->img_pos.y = initial_y;
 }
 
 void imageLoad_settingsbutton(image *img)
@@ -52,8 +53,8 @@ void imageLoad_settingsbutton(image *img)
     img->img_size.y = 0;
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
-    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2) - (img->img_size.w / 2);
-    img->img_pos.y = 400 + img->img_size.h + spacing;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
+    img->img_pos.y = initial_y + img->img_size.h + spacing;
 }
 
 void imageLoad_quitbutton(image *img)
@@ -69,8 +70,60 @@ void imageLoad_quitbutton(image *img)
     img->img_size.y = 0;
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
-    img->img_pos.x = ((SCREEN_W - img->img_size.w) / 2) - (img->img_size.w / 2);
-    img->img_pos.y = 400 + img->img_size.h * 2 + spacing * 2;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
+    img->img_pos.y = initial_y + img->img_size.h * 2 + spacing * 2;
+}
+
+// load the Clicked images
+void imageLoadClicked_playbutton(image *img)
+{
+    img->filename = "/assets/img/playButtonClicked.png";
+    img->img = IMG_Load(img->filename);
+    if (img->img == NULL)
+    {
+        printf("unable to load play button Error: %s.\n", IMG_GetError());
+        return;
+    }
+    img->img_size.x = 0;
+    img->img_size.y = 0;
+    img->img_size.w = img->img->w / 2;
+    img->img_size.h = img->img->h;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
+    img->img_pos.y = initial_y;
+}
+
+void imageLoadClicked_settingsbutton(image *img)
+{
+    img->filename = "/assets/img/MenuClicked.png";
+    img->img = IMG_Load(img->filename);
+    if (img->img == NULL)
+    {
+        printf("unable to load settings button Error: %s.\n", IMG_GetError());
+        return;
+    }
+    img->img_size.x = 0;
+    img->img_size.y = 0;
+    img->img_size.w = img->img->w / 2;
+    img->img_size.h = img->img->h;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
+    img->img_pos.y = initial_y + img->img_size.h + spacing;
+}
+
+imageLoadClicked_quitbutton(image *img)
+{
+    img->filename = "../assets/img/exitclicked.png";
+    img->img = IMG_Load(img->filename);
+    if (img->img == NULL)
+    {
+        printf("unable to load quit button Error: %s.\n", IMG_GetError());
+        return;
+    }
+    img->img_size.x = 0;
+    img->img_size.y = 0;
+    img->img_size.w = img->img->w;
+    img->img_size.h = img->img->h;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
+    img->img_pos.y = initial_y + img->img_size.h * 2 + spacing * 2;
 }
 
 // draw the images
@@ -93,6 +146,19 @@ void imageDraw_quitbutton(SDL_Surface *screen, image img)
     SDL_BlitSurface(img.img, NULL, screen, &img.img_pos);
 }
 
+// draw the clicked buttons
+void imageDrawClicked_playbutton(SDL_Surface *screen, image img)
+{
+    SDL_BlitSurface(img.img, &img.img_size, screen, &img.img_pos);
+}
+void imageDrawClicked_settingsbutton(SDL_Surface *screen, image img)
+{
+    SDL_BlitSurface(img.img, &img.img_size, screen, &img.img_pos);
+}
+void imageDrawClicked_quitbutton(SDL_Surface *screen, image img);
+{
+    SDL_BlitSurface(img.img, NULL, screen, &img.img_pos);
+}
 // free the images
 void imageFree(image img)
 {
