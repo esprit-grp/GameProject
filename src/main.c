@@ -8,12 +8,14 @@
 #include <SDL/SDL_mixer.h> //for loading sounds
 
 // including the headers
-#include "../include/menu.h"
+#include "../include/menu.h" //menu header
 #include "../include/music.h"
 #include "../include/text.h"
 
-// images (_C for clicked)
+// screen
 SDL_Surface *screen;
+
+// images (_C for clicked)
 image background;
 image playButton;
 image playButton_C;
@@ -31,7 +33,8 @@ text score;
 
 // logic
 SDL_Event event;
-int loop = 1;
+int loop = 1;   // game loop
+int anim_B = 0; // animation for the buttons
 
 /*
 ********************
@@ -103,40 +106,49 @@ int main()
                     loop = 0;
                     break;
                 case SDLK_f:
-                    SDL_WM_ToggleFullScreen(screen);
+                    SDL_WM_ToggleFullScreen(screen); //*move this to a button
                     break;
                 default:
                     break;
                 }
-                break;
+
             case SDL_MOUSEMOTION:
                 if (event.motion.x >= playButton.img_pos.x && event.motion.x <= playButton.img_pos.x + playButton.img_size.w && event.motion.y >= playButton.img_pos.y && event.motion.y <= playButton.img_pos.y + playButton.img_size.h)
                 {
                     FXLoad(clickFX);
-                    imageDrawClicked_playbutton(screen, playButton_C);
-                    SDL_Delay(1000);
+                    anim_B = 1;
                 }
                 if (event.motion.x >= settingsButton.img_pos.x && event.motion.x <= settingsButton.img_pos.x + settingsButton.img_size.w && event.motion.y >= settingsButton.img_pos.y && event.motion.y <= settingsButton.img_pos.y + settingsButton.img_size.h)
                 {
-                    imageDrawClicked_settingsbutton(screen, settingsButton_C);
                     FXLoad(clickFX);
-                    SDL_Delay(1000);
+                    anim_B = 2;
                 }
                 if (event.motion.x >= exitButton.img_pos.x && event.motion.x <= exitButton.img_pos.x + exitButton.img_size.w && event.motion.y >= exitButton.img_pos.y && event.motion.y <= exitButton.img_pos.y + exitButton.img_size.h)
                 {
-                    imageDrawClicked_quitbutton(screen, exitButton_C);
+                    anim_B = 3;
                     FXLoad(clickFX);
-                    SDL_Delay(1000);
                 }
                 break;
-
             case SDL_QUIT: // if the user clicks on the close button
                 loop = 0;
                 break;
-
             default:
                 break;
             }
+        }
+
+        // button animation logic
+        if (anim_B == 1)
+        {
+            imageDrawClicked_playbutton(screen, playButton_C);
+        }
+        else if (anim_B == 2)
+        {
+            imageDrawClicked_settingsbutton(screen, settingsButton_C);
+        }
+        else if (anim_B == 3)
+        {
+            imageDrawClicked_quitbutton(screen, exitButton_C);
         }
 
         // rereshing the screen
