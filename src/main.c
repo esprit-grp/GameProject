@@ -8,11 +8,11 @@
 #include <SDL/SDL_mixer.h> //for loading sounds
 
 // including the headers
-#include "../include/image.h"
+#include "../include/menu.h"
 #include "../include/music.h"
 #include "../include/text.h"
 
-// images _C for clicked
+// images (_C for clicked)
 SDL_Surface *screen;
 image background;
 image playButton;
@@ -101,6 +101,9 @@ int main()
                 {
                 case SDLK_ESCAPE:
                     loop = 0;
+                    break;
+                case SDLK_f:
+                    SDL_WM_ToggleFullScreen(screen);
                     break;
                 default:
                     break;
