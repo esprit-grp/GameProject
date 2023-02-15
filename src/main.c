@@ -8,12 +8,14 @@
 #include <SDL/SDL_mixer.h> //for loading sounds
 
 // including the headers
-#include "../include/menu.h"
+#include "../include/menu.h" //menu header
 #include "../include/music.h"
 #include "../include/text.h"
 
-// images (_C for clicked)
+// screen
 SDL_Surface *screen;
+
+// images (_C for clicked)
 image background;
 image playButton;
 image playButton_C;
@@ -31,8 +33,10 @@ text score;
 
 // logic
 SDL_Event event;
-int loop = 1;
-
+int loop = 1;             // game loop
+int anim_B = 0;           // animation for the buttons
+int isButtonAnimated = 0; // check if the button animated (to prevent FX spam)
+int selectedButton = 0;   // selected button (keyboard)
 /*
 ********************
 *****GAME BEGIN*****
@@ -103,44 +107,99 @@ int main()
                     loop = 0;
                     break;
                 case SDLK_f:
-                    SDL_WM_ToggleFullScreen(screen);
+                    SDL_WM_ToggleFullScreen(screen); // TODO Move this to a button NOT A KEY PRESS
+                    break;
+
+                // controlling the buttons by arrow keys
+                // ! not stable we need to add an arrow or smth to show the selected button
+                case SDLK_UP:
+                    selectedButton = (selectedButton - 1 + 3) % 3; // do the math here
+                    break;
+                case SDLK_DOWN:
+                    selectedButton = (selectedButton + 1) % 3;
+                    break;
+                case SDLK_RETURN:
+                    switch (selectedButton)
+                    {
+                    case 0:
+                        // start button pressed
+                        imageDrawClicked_settingsbutton(screen, settingsButton_C);
+                        FXLoad(clickFX);
+                        break;
+                    case 1:
+                        // settings button pressed
+                        imageDrawClicked_settingsbutton(screen, settingsButton_C);
+                        FXLoad(clickFX);
+                        break;
+                    case 2:
+                        // exit button pressed
+                        imageDrawClicked_quitbutton(screen, exitButton_C);
+                        FXLoad(clickFX);
+                        break;
+                    }
                     break;
                 default:
                     break;
                 }
-                break;
+                break; // this break for preventing the mouse motion event from being triggered
+
             case SDL_MOUSEMOTION:
                 if (event.motion.x >= playButton.img_pos.x && event.motion.x <= playButton.img_pos.x + playButton.img_size.w && event.motion.y >= playButton.img_pos.y && event.motion.y <= playButton.img_pos.y + playButton.img_size.h)
                 {
-                    FXLoad(clickFX);
-                    imageDrawClicked_playbutton(screen, playButton_C);
-                    SDL_Delay(1000);
+                    if (isButtonAnimated != 1)
+                    {
+                        anim_B = 1;
+                        FXLoad(clickFX);
+                    }
                 }
-                if (event.motion.x >= settingsButton.img_pos.x && event.motion.x <= settingsButton.img_pos.x + settingsButton.img_size.w && event.motion.y >= settingsButton.img_pos.y && event.motion.y <= settingsButton.img_pos.y + settingsButton.img_size.h)
+                else if (event.motion.x >= settingsButton.img_pos.x && event.motion.x <= settingsButton.img_pos.x + settingsButton.img_size.w && event.motion.y >= settingsButton.img_pos.y && event.motion.y <= settingsButton.img_pos.y + settingsButton.img_size.h)
                 {
-                    imageDrawClicked_settingsbutton(screen, settingsButton_C);
-                    FXLoad(clickFX);
-                    SDL_Delay(1000);
+                    if (isButtonAnimated != 2)
+                    {
+                        anim_B = 2;
+                        FXLoad(clickFX);
+                    }
                 }
-                if (event.motion.x >= exitButton.img_pos.x && event.motion.x <= exitButton.img_pos.x + exitButton.img_size.w && event.motion.y >= exitButton.img_pos.y && event.motion.y <= exitButton.img_pos.y + exitButton.img_size.h)
+                else if (event.motion.x >= exitButton.img_pos.x && event.motion.x <= exitButton.img_pos.x + exitButton.img_size.w && event.motion.y >= exitButton.img_pos.y && event.motion.y <= exitButton.img_pos.y + exitButton.img_size.h)
                 {
-                    imageDrawClicked_quitbutton(screen, exitButton_C);
-                    FXLoad(clickFX);
-                    SDL_Delay(1000);
+                    if (isButtonAnimated != 3)
+                    {
+                        anim_B = 3;
+                        FXLoad(clickFX);
+                    }
+                }
+                else
+                {
+                    anim_B = 0;
                 }
                 break;
 
             case SDL_QUIT: // if the user clicks on the close button
                 loop = 0;
                 break;
-
             default:
                 break;
             }
         }
 
+        // button animation logic
+        if (anim_B == 1)
+        {
+            imageDrawClicked_playbutton(screen, playButton_C);
+        }
+        else if (anim_B == 2)
+        {
+            imageDrawClicked_settingsbutton(screen, settingsButton_C);
+        }
+        else if (anim_B == 3)
+        {
+            imageDrawClicked_quitbutton(screen, exitButton_C);
+        }
+
         // rereshing the screen
         SDL_Flip(screen);
+        // checking which button is animated
+        isButtonAnimated = anim_B;
     }
 
     // free memory

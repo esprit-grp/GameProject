@@ -1,6 +1,7 @@
 #custom
 test/
 .vscode/
+test.c
 
 # Prerequisites
 *.d
