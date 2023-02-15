@@ -155,6 +155,7 @@ void imageDrawClicked_settingsbutton(SDL_Surface *screen, image img)
 {
     SDL_BlitSurface(img.img, &img.img_size, screen, &img.img_pos);
 }
+
 void imageDrawClicked_quitbutton(SDL_Surface *screen, image img)
 {
     SDL_BlitSurface(img.img, NULL, screen, &img.img_pos);
@@ -164,3 +165,4 @@ void imageFree(image img)
 {
     SDL_FreeSurface(img.img);
 }
+
