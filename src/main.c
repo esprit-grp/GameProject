@@ -11,12 +11,13 @@
 #include "../include/image.h"
 #include "../include/music.h"
 #include "../include/text.h"
+#include "../include/display.h"
 
 // images _C for clicked
 SDL_Surface *screen;
 image background;
 image playButton;
-image playButton_C;
+image playButton_C; 
 image settingsButton;
 image settingsButton_C;
 image exitButton;
@@ -49,15 +50,26 @@ int main()
     }
 
     // creating the window
-    screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
-    if (screen == NULL)
-    {
-        printf("Error creating the screen: %s\n", SDL_GetError());
-        return 1;
-    }
+        screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+        if (screen == NULL)
+        {
+            printf("Error creating the screen: %s\n", SDL_GetError());
+            return 1;
+        }
+    // create the settings window
+        settings = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+        if (settings == NULL)
+        {
+            printf("Error creating the settings window: %s\n", SDL_GetError());
+            return 1;
+        }
+        SDL_WM_SetCaption("Settings", NULL);
+        SDL_Rect settings_rect = { 160, 120, 0, 0 };
+
 
     // loading background
     imageLoad_background(&background);
+
     // loading buttons
     imageLoad_playbutton(&playButton);
     imageLoad_settingsbutton(&settingsButton);
@@ -91,48 +103,64 @@ int main()
         // drawing text
         textDraw(screen, score, "Score: 0");
 
+        //handling events
+        SDL_Event event;
+
         // events
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
             {
-            case SDL_KEYDOWN:
-                switch (event.key.keysym.sym)
-                {
-                case SDLK_ESCAPE:
-                    loop = 0;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case SDL_MOUSEMOTION:
-                if (event.motion.x >= playButton.img_pos.x && event.motion.x <= playButton.img_pos.x + playButton.img_size.w && event.motion.y >= playButton.img_pos.y && event.motion.y <= playButton.img_pos.y + playButton.img_size.h)
-                {
-                    FXLoad(clickFX);
-                    imageDrawClicked_playbutton(screen, playButton_C);
-                    SDL_Delay(1000);
-                }
-                if (event.motion.x >= settingsButton.img_pos.x && event.motion.x <= settingsButton.img_pos.x + settingsButton.img_size.w && event.motion.y >= settingsButton.img_pos.y && event.motion.y <= settingsButton.img_pos.y + settingsButton.img_size.h)
-                {
-                    imageDrawClicked_settingsbutton(screen, settingsButton_C);
-                    FXLoad(clickFX);
-                    SDL_Delay(1000);
-                }
-                if (event.motion.x >= exitButton.img_pos.x && event.motion.x <= exitButton.img_pos.x + exitButton.img_size.w && event.motion.y >= exitButton.img_pos.y && event.motion.y <= exitButton.img_pos.y + exitButton.img_size.h)
-                {
-                    imageDrawClicked_quitbutton(screen, exitButton_C);
-                    FXLoad(clickFX);
-                    SDL_Delay(1000);
-                }
-                break;
+                case SDL_KEYDOWN:
+                        switch (event.key.keysym.sym)
+                        {  //shortcuts
+                        case SDLK_ESCAPE: //  presses ESC -> quit
+                            loop = 0;
+                            break;
+                        case SDLK_F : //  presses F -> fullscreen
+                            toggle_fullscreen(screen);
+                            break;
+                         case SDLK_s: //  presses s -> settings+newwindow
+                            SDL_BlitSurface(settings_window, NULL, main_window, &settings_rect);
+                            SDL_Flip(main_window);
+                            break;    
+                        default:
+                            break;
+                        }
+                        break;
 
-            case SDL_QUIT: // if the user clicks on the close button
-                loop = 0;
-                break;
+                case SDL_MOUSEMOTION:
+                        if (event.motion.x >= playButton.img_pos.x && event.motion.x <= playButton.img_pos.x + playButton.img_size.w && event.motion.y >= playButton.img_pos.y && event.motion.y <= playButton.img_pos.y + playButton.img_size.h) // if the mouse is on the play button
+                            {
+                                FXLoad(clickFX);
+                                imageDrawClicked_playbutton(screen, playButton_C);
+                                SDL_Delay(1000);
+                            }
+                        {
+                            FXLoad(clickFX);
+                            imageDrawClicked_playbutton(screen, playButton_C);
+                            SDL_Delay(1000);
+                        }
+                        if (event.motion.x >= settingsButton.img_pos.x && event.motion.x <= settingsButton.img_pos.x + settingsButton.img_size.w && event.motion.y >= settingsButton.img_pos.y && event.motion.y <= settingsButton.img_pos.y + settingsButton.img_size.h) // if the mouse is on the settings button
+                        {
+                            imageDrawClicked_settingsbutton(screen, settingsButton_C);
+                            FXLoad(clickFX);
+                            SDL_Delay(1000);
+                        }
+                        if (event.motion.x >= exitButton.img_pos.x && event.motion.x <= exitButton.img_pos.x + exitButton.img_size.w && event.motion.y >= exitButton.img_pos.y && event.motion.y <= exitButton.img_pos.y + exitButton.img_size.h) // if the mouse is on the quit button
+                        {
+                            imageDrawClicked_quitbutton(screen, exitButton_C);
+                            FXLoad(clickFX);
+                            SDL_Delay(1000); 
+                        }
+                        break;
+                
+                case SDL_QUIT: // if the user clicks on the close button
+                        loop = 0;
+                        break;
 
-            default:
-                break;
+                          default:
+                        break;
             }
         }
 
