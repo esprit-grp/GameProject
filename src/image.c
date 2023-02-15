@@ -19,7 +19,7 @@ void imageLoad_background(image *img)
     img->img_pos.y = 0;
     img->img_size.x = 0;
     img->img_size.y = 0;
-    img->img_size.w = SCREEN_W;
+    img->img_size.w = SCREEN_W; 
     img->img_size.h = SCREEN_H;
 }
 
@@ -33,8 +33,8 @@ void imageLoad_playbutton(image *img)
         return;
     }
     img->img_size.x = 0;
-    img->img_size.y = 0;
-    img->img_size.w = img->img->w;
+    img->img_size.y = 0; 
+    img->img_size.w = img->img->w; // w is the width of the image
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
     img->img_pos.y = initial_y;
@@ -109,7 +109,7 @@ void imageLoadClicked_settingsbutton(image *img)
     img->img_pos.y = initial_y + img->img_size.h + spacing;
 }
 
-imageLoadClicked_quitbutton(image *img)
+void imageLoadClicked_quitbutton(image *img)
 {
     img->filename = "../assets/img/exitclicked.png";
     img->img = IMG_Load(img->filename);
