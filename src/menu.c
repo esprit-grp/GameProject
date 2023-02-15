@@ -109,7 +109,7 @@ void imageLoadClicked_settingsbutton(image *img)
     img->img_pos.y = initial_y + img->img_size.h + spacing;
 }
 
-imageLoadClicked_quitbutton(image *img)
+void imageLoadClicked_quitbutton(image *img)
 {
     img->filename = "../assets/img/exitclicked.png";
     img->img = IMG_Load(img->filename);
