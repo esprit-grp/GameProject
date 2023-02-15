@@ -1,6 +1,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include "../include/image.h"
+#include "../include/menu.h"
 
 spacing = 14;    // spacing between the buttons (px)
 initial_y = 350; // intitial y pos
