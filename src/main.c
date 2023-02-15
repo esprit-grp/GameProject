@@ -8,16 +8,19 @@
 #include <SDL/SDL_mixer.h> //for loading sounds
 
 // including the headers
-#include "../include/image.h"
+#include "../include/menu.h"
 #include "../include/music.h"
 #include "../include/text.h"
 
-// images
+// images (_C for clicked)
 SDL_Surface *screen;
 image background;
 image playButton;
+image playButton_C;
 image settingsButton;
+image settingsButton_C;
 image exitButton;
+image exitButton_C;
 
 // music
 Mix_Music *music;
@@ -53,11 +56,17 @@ int main()
         return 1;
     }
 
-    // loading images
+    // loading background
     imageLoad_background(&background);
+    // loading buttons
     imageLoad_playbutton(&playButton);
     imageLoad_settingsbutton(&settingsButton);
     imageLoad_quitbutton(&exitButton);
+
+    // loading clicked buttons
+    imageLoadClicked_playbutton(&playButton_C);
+    imageLoadClicked_settingsbutton(&settingsButton_C);
+    imageLoadClicked_quitbutton(&exitButton_C);
 
     // loading music
     musicLoad(music);
@@ -87,10 +96,37 @@ int main()
         {
             switch (event.type)
             {
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_ESCAPE:
+                    loop = 0;
+                    break;
+                case SDLK_f:
+                    SDL_WM_ToggleFullScreen(screen);
+                    break;
+                default:
+                    break;
+                }
+                break;
             case SDL_MOUSEMOTION:
                 if (event.motion.x >= playButton.img_pos.x && event.motion.x <= playButton.img_pos.x + playButton.img_size.w && event.motion.y >= playButton.img_pos.y && event.motion.y <= playButton.img_pos.y + playButton.img_size.h)
                 {
                     FXLoad(clickFX);
+                    imageDrawClicked_playbutton(screen, playButton_C);
+                    SDL_Delay(1000);
+                }
+                if (event.motion.x >= settingsButton.img_pos.x && event.motion.x <= settingsButton.img_pos.x + settingsButton.img_size.w && event.motion.y >= settingsButton.img_pos.y && event.motion.y <= settingsButton.img_pos.y + settingsButton.img_size.h)
+                {
+                    imageDrawClicked_settingsbutton(screen, settingsButton_C);
+                    FXLoad(clickFX);
+                    SDL_Delay(1000);
+                }
+                if (event.motion.x >= exitButton.img_pos.x && event.motion.x <= exitButton.img_pos.x + exitButton.img_size.w && event.motion.y >= exitButton.img_pos.y && event.motion.y <= exitButton.img_pos.y + exitButton.img_size.h)
+                {
+                    imageDrawClicked_quitbutton(screen, exitButton_C);
+                    FXLoad(clickFX);
+                    SDL_Delay(1000);
                 }
                 break;
 
@@ -107,11 +143,14 @@ int main()
         SDL_Flip(screen);
     }
 
-    // freeing memory
-    imageFree(&background);
-    imageFree(&playButton);
-    imageFree(&settingsButton);
-    imageFree(&exitButton);
+    // free memory
+    imageFree(background);
+    imageFree(playButton);
+    imageFree(playButton_C);
+    imageFree(settingsButton);
+    imageFree(settingsButton_C);
+    imageFree(exitButton);
+    imageFree(exitButton_C);
     musicFree(music);
 
     SDL_Quit();
