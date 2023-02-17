@@ -8,21 +8,26 @@
 #include <SDL/SDL_mixer.h> //for loading sounds
 
 // including the headers
-#include "../include/menu.h" //menu header
-#include "../include/music.h"
-#include "../include/text.h"
+#include "../include/menu.h"  //menu header
+#include "../include/music.h" //music header
+#include "../include/text.h"  //text header
 
 // screen
 SDL_Surface *screen;
 
-// images (_C for clicked)
+//* regular -> hovered -> clicked
+// images (_C for clicked) (_H for hovered)
 image background;
+image gametitle;
 image playButton;
 image playButton_C;
+image playButton_H;
 image settingsButton;
 image settingsButton_C;
+image settingsButton_H;
 image exitButton;
 image exitButton_C;
+image exitButton_H;
 
 // music
 Mix_Music *music;
@@ -37,6 +42,7 @@ int loop = 1;             // game loop
 int anim_B = 0;           // animation for the buttons
 int isButtonAnimated = 0; // check if the button animated (to prevent FX spam)
 int selectedButton = 0;   // selected button (keyboard)
+
 /*
 ********************
 *****GAME BEGIN*****
@@ -60,8 +66,10 @@ int main()
         return 1;
     }
 
-    // loading background
+    // loading background and game title
     imageLoad_background(&background);
+    imageLoad_gametitle(&gametitle);
+
     // loading buttons
     imageLoad_playbutton(&playButton);
     imageLoad_settingsbutton(&settingsButton);
@@ -71,6 +79,11 @@ int main()
     imageLoadClicked_playbutton(&playButton_C);
     imageLoadClicked_settingsbutton(&settingsButton_C);
     imageLoadClicked_quitbutton(&exitButton_C);
+
+    // loading hovered buttons
+    imageLoadHovered_playbutton(&playButton_H);
+    imageLoadHovered_settingsbutton(&settingsButton_H);
+    imageLoadHovered_quitbutton(&exitButton_H);
 
     // loading music
     musicLoad(music);
@@ -86,14 +99,17 @@ int main()
 
     while (loop)
     {
-        // drawing images
+        // drawing background and game title
         imageDraw_background(screen, background);
+        imageDraw_gametitle(screen, gametitle);
+
+        // drawing intial buttons
         imageDraw_playbutton(screen, playButton);
         imageDraw_settingsbutton(screen, settingsButton);
         imageDraw_quitbutton(screen, exitButton);
 
         // drawing text
-        textDraw(screen, score, "Score: 0");
+        textDraw(screen, score, "KingsMan Team, 2023"); //? maybe add text ("by Kingsman team")
 
         // events
         while (SDL_PollEvent(&event))
@@ -185,31 +201,34 @@ int main()
         // button animation logic
         if (anim_B == 1)
         {
-            imageDrawClicked_playbutton(screen, playButton_C);
+            imageDrawHovered_playbutton(screen, playButton_H);
         }
         else if (anim_B == 2)
         {
-            imageDrawClicked_settingsbutton(screen, settingsButton_C);
+            imageDrawHovered_settingsbutton(screen, settingsButton_H);
         }
         else if (anim_B == 3)
         {
-            imageDrawClicked_quitbutton(screen, exitButton_C);
+            imageDrawHovered_quitbutton(screen, exitButton_H);
         }
 
-        // rereshing the screen
-        SDL_Flip(screen);
         // checking which button is animated
         isButtonAnimated = anim_B;
+        // rereshing the screen
+        SDL_Flip(screen);
     }
 
     // free memory
     imageFree(background);
     imageFree(playButton);
     imageFree(playButton_C);
+    imageFree(playButton_H);
     imageFree(settingsButton);
     imageFree(settingsButton_C);
+    imageFree(settingsButton_H);
     imageFree(exitButton);
     imageFree(exitButton_C);
+    imageFree(exitButton_H);
     musicFree(music);
 
     SDL_Quit();

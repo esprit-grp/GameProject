@@ -19,8 +19,8 @@ void textLoad(text *txt)
     txt->color.g = 255; // green
     txt->color.b = 255; // blue
 
-    txt->pos.x = 210; // x position
-    txt->pos.y = 0;   // y position
+    txt->pos.x = 1100; // x position
+    txt->pos.y = 650;  // y position
 }
 
 void textDraw(SDL_Surface *screen, text txt, char *str)
