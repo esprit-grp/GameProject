@@ -1,5 +1,5 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef MENU_H
+#define MENU_H
 
 #define SCREEN_W 1280
 #define SCREEN_H 720 // screen height and width
