@@ -13,6 +13,7 @@
 #include "../include/text.h"  //text header
 
 // screen
+// screen
 SDL_Surface *screen;
 
 //* regular -> hovered -> clicked
@@ -57,6 +58,13 @@ int main()
         printf("SDL_Init Error: %s.\n", SDL_GetError());
         return 1;
     }
+     
+     //--------------------//
+     if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
+        printf("Mix_OpenAudio failed: %s\n", Mix_GetError());
+        return 1;
+    }
+    //--------------------//
 
     // creating the window
     screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
