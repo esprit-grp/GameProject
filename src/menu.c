@@ -94,7 +94,7 @@ void imageLoad_quitbutton(image *img)
 // load the Clicked images
 void imageLoadClicked_playbutton(image *img)
 {
-    img->filename = "/assets/img/startc.png";
+    img->filename = "../assets/img/startc.png";
     img->img = IMG_Load(img->filename);
     if (img->img == NULL)
     {
@@ -111,7 +111,7 @@ void imageLoadClicked_playbutton(image *img)
 
 void imageLoadClicked_settingsbutton(image *img)
 {
-    img->filename = "/assets/img/optionsc.png";
+    img->filename = "../assets/img/optionsc.png";
     img->img = IMG_Load(img->filename);
     if (img->img == NULL)
     {

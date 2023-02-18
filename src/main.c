@@ -17,7 +17,8 @@
 SDL_Surface *screen;
 #define SCREEN_W 1280
 #define SCREEN_H 720 // screen height and width
-#define STARS_COUNT 10
+
+#define STARS_COUNT 100
 #define STARS_LAYERS 4
 #define DELTA_TIME 16 // 1000ms / 60fps = 16.6666
 
@@ -175,7 +176,7 @@ int main()
                     {
                     case 0:
                         // start button pressed
-                        imageDrawClicked_settingsbutton(screen, settingsButton_C);
+                        imageDrawClicked_playbutton(screen, playButton_C);
                         FXLoad(clickFX);
                         break;
                     case 1:
@@ -234,7 +235,7 @@ int main()
             }
         }
 
-        // button animation logic
+        // button hover logic
         if (anim_B == 1)
         {
             imageDrawHovered_playbutton(screen, playButton_H);
@@ -247,9 +248,9 @@ int main()
         {
             imageDrawHovered_quitbutton(screen, exitButton_H);
         }
-
         // checking which button is animated
         isButtonAnimated = anim_B;
+
         // rereshing the screen
         SDL_Flip(screen);
         SDL_Delay(DELTA_TIME);
