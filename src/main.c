@@ -11,9 +11,15 @@
 #include "../include/menu.h"  //menu header
 #include "../include/music.h" //music header
 #include "../include/text.h"  //text header
+#include "stars.h"
 
 // screen
 SDL_Surface *screen;
+#define SCREEN_W 1280
+#define SCREEN_H 720 // screen height and width
+#define STARS_COUNT 10
+#define STARS_LAYERS 4
+#define DELTA_TIME 16 // 1000ms / 60fps = 16.6666
 
 //* regular -> hovered -> clicked
 // images (_C for clicked) (_H for hovered)
@@ -66,8 +72,24 @@ int main()
         return 1;
     }
 
-    // loading background and game title
-    imageLoad_background(&background);
+    // loading stars layers
+    SDL_Surface *star_images[STARS_LAYERS];
+    star_images[0] = IMG_Load("../assets/img/star1.png");
+    star_images[1] = IMG_Load("../assets/img/star2.png");
+    star_images[2] = IMG_Load("../assets/img/star3.png");
+    star_images[3] = IMG_Load("../assets/img/star4.png");
+
+    Star stars[STARS_COUNT];
+
+    for (int i = 0; i < STARS_COUNT; i++)
+    {
+        int layer = rand() % STARS_LAYERS;
+        int x = rand() % SCREEN_W;
+        int y = rand() % SCREEN_H;
+        int speed = 50 + rand() % 150;
+        init_star(&stars[i], star_images[layer], x, y, speed);
+    }
+
     imageLoad_gametitle(&gametitle);
 
     // loading buttons
@@ -91,6 +113,8 @@ int main()
     // loading text
     textLoad(&score);
 
+    Uint32 last_time = SDL_GetTicks();
+
     /*
      ********************
      *****GAME LOOP******
@@ -99,8 +123,20 @@ int main()
 
     while (loop)
     {
+
+        Uint32 current_time = SDL_GetTicks();
+        Uint32 delta_time = current_time - last_time;
+        last_time = current_time;
+
         // drawing background and game title
-        imageDraw_background(screen, background);
+        SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0)); // black background
+
+        for (int i = 0; i < STARS_COUNT; i++)
+        {
+            move_star(&stars[i], delta_time);
+            draw_star(screen, &stars[i]);
+        }
+
         imageDraw_gametitle(screen, gametitle);
 
         // drawing intial buttons
@@ -109,7 +145,7 @@ int main()
         imageDraw_quitbutton(screen, exitButton);
 
         // drawing text
-        textDraw(screen, score, "KingsMan Team, 2023"); //? maybe add text ("by Kingsman team")
+        textDraw(screen, score, "KingsMan Team, 2023");
 
         // events
         while (SDL_PollEvent(&event))
@@ -216,6 +252,7 @@ int main()
         isButtonAnimated = anim_B;
         // rereshing the screen
         SDL_Flip(screen);
+        SDL_Delay(DELTA_TIME);
     }
 
     // free memory
@@ -230,6 +267,10 @@ int main()
     imageFree(exitButton_C);
     imageFree(exitButton_H);
     musicFree(music);
+    SDL_FreeSurface(star_images[0]);
+    SDL_FreeSurface(star_images[1]);
+    SDL_FreeSurface(star_images[2]);
+    SDL_FreeSurface(star_images[3]);
 
     SDL_Quit();
     return 0;
