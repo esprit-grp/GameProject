@@ -11,7 +11,7 @@
 #include "../include/menu.h"  //menu header
 #include "../include/music.h" //music header
 #include "../include/text.h"  //text header
-#include "stars.h"
+#include "../include/stars.h"
 
 // screen
 SDL_Surface *screen;
