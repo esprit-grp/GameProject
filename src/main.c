@@ -11,16 +11,16 @@
 #include "../include/menu.h"  //menu header
 #include "../include/music.h" //music header
 #include "../include/text.h"  //text header
-#include "../include/stars.h"
+#include "../include/stars.h" //stars header
 
 // screen
 SDL_Surface *screen;
 #define SCREEN_W 1280
 #define SCREEN_H 720 // screen height and width
 
-#define STARS_COUNT 100
-#define STARS_LAYERS 4
-#define DELTA_TIME 16 // 1000ms / 60fps = 16.6666
+#define STARS_COUNT 100 // number of stars //! need locking
+#define STARS_LAYERS 4  // number of stars variations
+#define DELTA_TIME 16   // 1000ms / 60fps = 16.6666
 
 //* regular -> hovered -> clicked
 // images (_C for clicked) (_H for hovered)
@@ -45,10 +45,12 @@ text score;
 
 // logic
 SDL_Event event;
-int loop = 1;             // game loop
-int anim_B = 0;           // animation for the buttons
-int isButtonAnimated = 0; // check if the button animated (to prevent FX spam)
-int selectedButton = 0;   // selected button (keyboard)
+int loop = 1;               // game loop
+int anim_B = 0;             // animation for the buttons
+int isButtonAnimated = 0;   // check if the button animated (to prevent FX spam)
+int selectedButton = 0;     // selected button (keyboard)
+int lastHoveredButton = -1; // last hovered button (keyboard and mouse) but made for keyboard
+int StopTheGame = 0;        // stop the game, if StopTheGame = 1 -> loop = 0
 
 /*
 ********************
@@ -153,6 +155,7 @@ int main()
         {
             switch (event.type)
             {
+            // controlling the buttons by arrow keys
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym)
                 {
@@ -162,14 +165,13 @@ int main()
                 case SDLK_f:
                     SDL_WM_ToggleFullScreen(screen); // TODO Move this to a button NOT A KEY PRESS
                     break;
-
-                // controlling the buttons by arrow keys
-                // ! not stable we need to add an arrow or smth to show the selected button
                 case SDLK_UP:
-                    selectedButton = (selectedButton - 1 + 3) % 3; // do the math here
+                    selectedButton = (selectedButton - 1 + 3) % 3;
+                    anim_B = selectedButton;
                     break;
                 case SDLK_DOWN:
                     selectedButton = (selectedButton + 1) % 3;
+                    anim_B = selectedButton;
                     break;
                 case SDLK_RETURN:
                     switch (selectedButton)
@@ -199,25 +201,25 @@ int main()
             case SDL_MOUSEMOTION:
                 if (event.motion.x >= playButton.img_pos.x && event.motion.x <= playButton.img_pos.x + playButton.img_size.w && event.motion.y >= playButton.img_pos.y && event.motion.y <= playButton.img_pos.y + playButton.img_size.h)
                 {
+                    if (isButtonAnimated != 0)
+                    {
+                        anim_B = 0;
+                        FXLoad(clickFX);
+                    }
+                }
+                else if (event.motion.x >= settingsButton.img_pos.x && event.motion.x <= settingsButton.img_pos.x + settingsButton.img_size.w && event.motion.y >= settingsButton.img_pos.y && event.motion.y <= settingsButton.img_pos.y + settingsButton.img_size.h)
+                {
                     if (isButtonAnimated != 1)
                     {
                         anim_B = 1;
                         FXLoad(clickFX);
                     }
                 }
-                else if (event.motion.x >= settingsButton.img_pos.x && event.motion.x <= settingsButton.img_pos.x + settingsButton.img_size.w && event.motion.y >= settingsButton.img_pos.y && event.motion.y <= settingsButton.img_pos.y + settingsButton.img_size.h)
+                else if (event.motion.x >= exitButton.img_pos.x && event.motion.x <= exitButton.img_pos.x + exitButton.img_size.w && event.motion.y >= exitButton.img_pos.y && event.motion.y <= exitButton.img_pos.y + exitButton.img_size.h)
                 {
                     if (isButtonAnimated != 2)
                     {
                         anim_B = 2;
-                        FXLoad(clickFX);
-                    }
-                }
-                else if (event.motion.x >= exitButton.img_pos.x && event.motion.x <= exitButton.img_pos.x + exitButton.img_size.w && event.motion.y >= exitButton.img_pos.y && event.motion.y <= exitButton.img_pos.y + exitButton.img_size.h)
-                {
-                    if (isButtonAnimated != 3)
-                    {
-                        anim_B = 3;
                         FXLoad(clickFX);
                     }
                 }
@@ -236,20 +238,41 @@ int main()
         }
 
         // button hover logic
-        if (anim_B == 1)
+        if (anim_B == 0)
         {
             imageDrawHovered_playbutton(screen, playButton_H);
+            lastHoveredButton = 0; // remember that the play button was last hovered
+        }
+        else if (anim_B == 1)
+        {
+            imageDrawHovered_settingsbutton(screen, settingsButton_H);
+            lastHoveredButton = 1; // remember that the settings button was last hovered
         }
         else if (anim_B == 2)
         {
-            imageDrawHovered_settingsbutton(screen, settingsButton_H);
-        }
-        else if (anim_B == 3)
-        {
             imageDrawHovered_quitbutton(screen, exitButton_H);
+            lastHoveredButton = 2; // remember that the quit button was last hovered
+        }
+        else
+        {
+            // if no button is currently hovered, but we remember the last one, draw it as hovered
+            if (lastHoveredButton == 0)
+            {
+                imageDrawHovered_playbutton(screen, playButton_H);
+            }
+            else if (lastHoveredButton == 1)
+            {
+                imageDrawHovered_settingsbutton(screen, settingsButton_H);
+            }
+            else if (lastHoveredButton == 2)
+            {
+                imageDrawHovered_quitbutton(screen, exitButton_H);
+            }
         }
         // checking which button is animated
         isButtonAnimated = anim_B;
+
+        // logic variable control
 
         // rereshing the screen
         SDL_Flip(screen);
