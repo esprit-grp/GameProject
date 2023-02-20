@@ -204,7 +204,7 @@ int main()
                     switch (event.key.keysym.sym)
                     {
                     case SDLK_f:
-                        SDL_WM_ToggleFullScreen(screen); // TODO Move this to a button NOT A KEY PRESS
+                        SDL_WM_ToggleFullScreen(screen);
                         break;
                     case SDLK_UP:
                         selectedButton = (selectedButton - 1 + 3) % 3;
@@ -434,9 +434,37 @@ int main()
             break;
         case 2:
             // start (play) menu
-            SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 179, 254, 254));
+            SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 179, 254, 254)); // light blue
             imageDraw_lvlmenutitle(screen, startMenuTitle);
             imageDraw_lvl1(screen, lvl1);
+            imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
+
+            while (SDL_PollEvent(&event))
+            {
+                switch (event.type)
+                {
+                case SDL_QUIT: // if the user clicks on the close button
+                    StopTheGame = 1;
+                    break;
+                default:
+                    break;
+
+                case SDL_MOUSEBUTTONDOWN:
+                    switch (event.button.button)
+                    {
+                    case SDL_BUTTON_LEFT:
+                        if (event.button.x >= backButton.img_pos.x && event.button.x <= backButton.img_pos.x + backButton.img_size.w && event.button.y >= backButton.img_pos.y && event.button.y <= backButton.img_pos.y + backButton.img_size.h)
+                        {
+                            FXLoad(clickFX);
+                            UI = 0;
+                        }
+                    default:
+                        break;
+                    }
+                    break;
+                }
+            }
+            break;
         }
         /*
          *********************************
