@@ -60,6 +60,7 @@ void imageLoad_playbutton(image *img)
 void imageLoad_settingsbutton(image *img)
 {
     img->filename = "../assets/img/options.png";
+
     img->img = IMG_Load(img->filename);
     if (img->img == NULL)
     {

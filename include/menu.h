@@ -1,3 +1,4 @@
+
 #ifndef MENU_H
 #define MENU_H
 
@@ -45,6 +46,7 @@ void imageDrawClicked_playbutton(SDL_Surface *screen, image img);
 void imageDrawClicked_settingsbutton(SDL_Surface *screen, image img);
 void imageDrawClicked_quitbutton(SDL_Surface *screen, image img);
 
+
 void imageDrawHovered_playbutton(SDL_Surface *screen, image img);
 void imageDrawHovered_settingsbutton(SDL_Surface *screen, image img);
 void imageDrawHovered_quitbutton(SDL_Surface *screen, image img);
@@ -52,6 +54,6 @@ void imageDrawHovered_quitbutton(SDL_Surface *screen, image img);
 // TODO make universal functions .h and .c files
 //**UNIVERSAL FUNCTION**//
 //  free buttons
-void imageFree(image img);
+
 
 #endif

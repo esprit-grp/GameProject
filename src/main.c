@@ -10,6 +10,7 @@
 #include <SDL/SDL_mixer.h> //for loading sounds
 
 // including the headers
+
 #include "../include/menu.h"     //menu header
 #include "../include/music.h"    //music header
 #include "../include/text.h"     //text header
