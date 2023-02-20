@@ -53,6 +53,10 @@ image backButton_H;
 image fullscreenButton;
 image fullscreenButton_H;
 
+// start game images
+image startMenuTitle;
+image lvl1;
+
 // music
 Mix_Music *music;
 Mix_Chunk *clickFX;
@@ -136,7 +140,9 @@ int main()
     // loading text
     textLoad(&author);
 
-    // loading settings menu images //? maybe add background instead of solid color for settings menu
+    //* loading settings menu images
+    //? maybe add background instead of solid color for settings menu
+
     imageLoad_sounddown(&volumeButtonDOWN);
     imageLoad_soundup(&volumeButtonUP);
     imageLoad_soundmute(&volumeButtonMUTE);
@@ -145,6 +151,10 @@ int main()
 
     imageLoadHovered_soundmute(&volumeButtonMUTE_H);
     imageLoadHovered_backbutton(&backButton_H);
+
+    //* loading start (play) menu images
+    imageLoad_lvlmenutitle(&startMenuTitle);
+    imageLoad_lvl1(&lvl1);
 
     // uint32 return time in milliseconds
     Uint32 last_time = SDL_GetTicks();
@@ -211,6 +221,7 @@ int main()
                             // start button pressed
                             imageDrawClicked_playbutton(screen, playButton_C);
                             FXLoad(clickFX);
+                            UI = 2;
                             break;
                         case 1:
                             // settings button pressed
@@ -239,6 +250,7 @@ int main()
                         {
                             imageDrawClicked_playbutton(screen, playButton_C);
                             FXLoad(clickFX);
+                            UI = 2;
                         }
                         else if (event.button.x >= settingsButton.img_pos.x && event.button.x <= settingsButton.img_pos.x + settingsButton.img_size.w && event.button.y >= settingsButton.img_pos.y && event.button.y <= settingsButton.img_pos.y + settingsButton.img_size.h)
                         {
@@ -419,6 +431,12 @@ int main()
                     break;
                 }
             }
+            break;
+        case 2:
+            // start (play) menu
+            SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 179, 254, 254));
+            imageDraw_lvlmenutitle(screen, startMenuTitle);
+            imageDraw_lvl1(screen, lvl1);
         }
         /*
          *********************************
@@ -454,6 +472,7 @@ int main()
     SDL_FreeSurface(star_images[1]);
     SDL_FreeSurface(star_images[2]);
     SDL_FreeSurface(star_images[3]);
+    // todo add missing frees
 
     SDL_Quit();
     return 0;
