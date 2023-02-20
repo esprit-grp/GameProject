@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h> //for loading images
 #include <SDL/SDL_ttf.h>   //for loading fonts
@@ -68,6 +70,7 @@ int lastHoveredButton = -1; // last hovered button (keyboard and mouse) but made
 int StopTheGame = 0;        // stop the game, if StopTheGame = 1 -> loop = 0
 int UI = 0;                 // UI = 0 -> main menu, UI = 1 -> settings menu, UI = 2 -> game
 int volume = 64;            // volume of the music (0 - 128)
+bool muteButtonOn = false;  // mute button state
 
 /*
 ********************
@@ -339,7 +342,14 @@ int main()
             // drawing the buttons
             imageDraw_sounddown(screen, volumeButtonDOWN);
             imageDraw_soundup(screen, volumeButtonUP);
-            imageDraw_soundmute(screen, volumeButtonMUTE);
+            if (muteButtonOn)
+            {
+                imageDrawHovered_soundmute(screen, volumeButtonMUTE_H);
+            }
+            else
+            {
+                imageDraw_soundmute(screen, volumeButtonMUTE);
+            }
             imageDraw_fullscreen(screen, fullscreenButton);
             imageDraw_backbutton(screen, backButton);
 
@@ -383,7 +393,10 @@ int main()
                         else if (event.button.x >= volumeButtonMUTE.img_pos.x && event.button.x <= volumeButtonMUTE.img_pos.x + volumeButtonMUTE.img_size.w && event.button.y >= volumeButtonMUTE.img_pos.y && event.button.y <= volumeButtonMUTE.img_pos.y + volumeButtonMUTE.img_size.h)
                         {
                             FXLoad(clickFX);
-                            if (volume == 0)
+                            muteButtonOn = !muteButtonOn; // toggle the mute button state
+
+                            // draw the appropriate image based on the mute button state
+                            if (muteButtonOn)
                             {
                                 volume = 128;
                             }

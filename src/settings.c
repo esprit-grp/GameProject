@@ -3,6 +3,8 @@
 #include "../include/menu.h" //! temporarily until i make a universal image.h
 #include "../include/settings.h"
 
+int x_spacing = 200;
+
 void imageLoad_sounddown(image *img)
 {
     img->filename = "../assets/img/-.png";
@@ -16,8 +18,8 @@ void imageLoad_sounddown(image *img)
     img->img_size.y = 0;
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
-    img->img_pos.x = 50;
-    img->img_pos.y = 180;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2)) - x_spacing;
+    img->img_pos.y = 200;
 }
 
 void imageLoad_soundup(image *img)
@@ -33,8 +35,8 @@ void imageLoad_soundup(image *img)
     img->img_size.y = 0;
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
-    img->img_pos.x = 980;
-    img->img_pos.y = 180;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2)) + x_spacing;
+    img->img_pos.y = 200;
 }
 
 void imageLoad_soundmute(image *img)
@@ -50,7 +52,7 @@ void imageLoad_soundmute(image *img)
     img->img_size.y = 0;
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
-    img->img_pos.x = 565;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
     img->img_pos.y = 180;
 }
 
@@ -67,7 +69,7 @@ void imageLoad_fullscreen(image *img)
     img->img_size.y = 0;
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
-    img->img_pos.x = 570;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
     img->img_pos.y = 0;
 }
 
@@ -85,7 +87,7 @@ void imageLoad_backbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = 0;
-    img->img_pos.y = 670;
+    img->img_pos.y = 670 - img->img_size.h;
 }
 
 void imageLoadHovered_soundmute(image *img)
@@ -101,8 +103,8 @@ void imageLoadHovered_soundmute(image *img)
     img->img_size.y = 0;
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
-    img->img_pos.x = 0;
-    img->img_pos.y = 0;
+    img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
+    img->img_pos.y = 180;
 }
 
 void imageLoadHovered_backbutton(image *img)
