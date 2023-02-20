@@ -49,7 +49,9 @@ void imageDrawHovered_playbutton(SDL_Surface *screen, image img);
 void imageDrawHovered_settingsbutton(SDL_Surface *screen, image img);
 void imageDrawHovered_quitbutton(SDL_Surface *screen, image img);
 
-// free buttons
+// TODO make universal functions .h and .c files
+//**UNIVERSAL FUNCTION**//
+//  free buttons
 void imageFree(image img);
 
 #endif
