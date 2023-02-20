@@ -25,6 +25,7 @@ SDL_Surface *screen;
 
 //* regular -> hovered -> clicked
 // images (_C for clicked) (_H for hovered)
+// main menu images
 image background;
 image gametitle;
 image playButton;
@@ -37,12 +38,25 @@ image exitButton;
 image exitButton_C;
 image exitButton_H;
 
+// settings menu images
+image settingsBackground;
+image volumeButtonUP;
+image volumeButtonUP_H;
+image volumeButtonDOWN;
+image volumeButtonDOWN_H;
+image volumeButtonMUTE;
+image volumeButtonMUTE_H;
+image backButton;
+image backButton_H;
+image fullscreenButton;
+image fullscreenButton_H;
+
 // music
 Mix_Music *music;
 Mix_Chunk *clickFX;
 
 // text
-text score;
+text author;
 
 // logic
 SDL_Event event;
@@ -53,6 +67,7 @@ int selectedButton = 0;     // selected button (keyboard)
 int lastHoveredButton = -1; // last hovered button (keyboard and mouse) but made for keyboard
 int StopTheGame = 0;        // stop the game, if StopTheGame = 1 -> loop = 0
 int UI = 0;                 // UI = 0 -> main menu, UI = 1 -> settings menu, UI = 2 -> game
+int volume = 64;            // volume of the music (0 - 128)
 
 /*
 ********************
@@ -116,7 +131,17 @@ int main()
     musicLoad(music);
 
     // loading text
-    textLoad(&score);
+    textLoad(&author);
+
+    // loading settings menu images //? maybe add background instead of solid color for settings menu
+    imageLoad_sounddown(&volumeButtonDOWN);
+    imageLoad_soundup(&volumeButtonUP);
+    imageLoad_soundmute(&volumeButtonMUTE);
+    imageLoad_fullscreen(&fullscreenButton);
+    imageLoad_backbutton(&backButton);
+
+    imageLoadHovered_soundmute(&volumeButtonMUTE_H);
+    imageLoadHovered_backbutton(&backButton_H);
 
     // uint32 return time in milliseconds
     Uint32 last_time = SDL_GetTicks();
@@ -154,7 +179,7 @@ int main()
             imageDraw_quitbutton(screen, exitButton);
 
             // drawing text
-            textDraw(screen, score, "KingsMan Team, 2023");
+            textDraw(screen, author, "KingsMan Team, 2023");
 
             // events
             while (SDL_PollEvent(&event))
@@ -309,7 +334,14 @@ int main()
             break;
         case 1:
             // settings menu
-            SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 179, 254, 254));
+            SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
+
+            // drawing the buttons
+            imageDraw_sounddown(screen, volumeButtonDOWN);
+            imageDraw_soundup(screen, volumeButtonUP);
+            imageDraw_soundmute(screen, volumeButtonMUTE);
+            imageDraw_fullscreen(screen, fullscreenButton);
+            imageDraw_backbutton(screen, backButton);
 
             while (SDL_PollEvent(&event))
             {
@@ -320,11 +352,61 @@ int main()
                     break;
                 default:
                     break;
+
+                case SDL_MOUSEBUTTONDOWN:
+                    switch (event.button.button)
+                    {
+                    case SDL_BUTTON_LEFT:
+                        if (event.button.x >= backButton.img_pos.x && event.button.x <= backButton.img_pos.x + backButton.img_size.w && event.button.y >= backButton.img_pos.y && event.button.y <= backButton.img_pos.y + backButton.img_size.h)
+                        {
+                            FXLoad(clickFX);
+                            UI = 0;
+                        }
+                        else if (event.button.x >= volumeButtonDOWN.img_pos.x && event.button.x <= volumeButtonDOWN.img_pos.x + volumeButtonDOWN.img_size.w && event.button.y >= volumeButtonDOWN.img_pos.y && event.button.y <= volumeButtonDOWN.img_pos.y + volumeButtonDOWN.img_size.h)
+                        {
+                            FXLoad(clickFX);
+                            if (volume > 0)
+                            {
+                                volume -= 10;
+                            }
+                            Mix_VolumeMusic(volume);
+                        }
+                        else if (event.button.x >= volumeButtonUP.img_pos.x && event.button.x <= volumeButtonUP.img_pos.x + volumeButtonUP.img_size.w && event.button.y >= volumeButtonUP.img_pos.y && event.button.y <= volumeButtonUP.img_pos.y + volumeButtonUP.img_size.h)
+                        {
+                            FXLoad(clickFX);
+                            if (volume < 128)
+                            {
+                                volume += 10;
+                            }
+                            Mix_VolumeMusic(volume);
+                        }
+                        else if (event.button.x >= volumeButtonMUTE.img_pos.x && event.button.x <= volumeButtonMUTE.img_pos.x + volumeButtonMUTE.img_size.w && event.button.y >= volumeButtonMUTE.img_pos.y && event.button.y <= volumeButtonMUTE.img_pos.y + volumeButtonMUTE.img_size.h)
+                        {
+                            FXLoad(clickFX);
+                            if (volume == 0)
+                            {
+                                volume = 128;
+                            }
+                            else
+                            {
+                                volume = 0;
+                            }
+                            Mix_VolumeMusic(volume);
+                        }
+                        else if (event.button.x >= fullscreenButton.img_pos.x && event.button.x <= fullscreenButton.img_pos.x + fullscreenButton.img_size.w && event.button.y >= fullscreenButton.img_pos.y && event.button.y <= fullscreenButton.img_pos.y + fullscreenButton.img_size.h)
+                        {
+                            FXLoad(clickFX);
+                            SDL_WM_ToggleFullScreen(screen);
+                        }
+                        break;
+
+                    default:
+                        break;
+                    }
+                    break;
                 }
             }
-            break;
         }
-
         /*
          *********************************
          *****logic variable control******
@@ -343,7 +425,6 @@ int main()
             loop = 0;
         }
     }
-
     // free memory
     imageFree(background);
     imageFree(playButton);
