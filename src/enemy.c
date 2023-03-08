@@ -14,28 +14,35 @@ void initEnemy(enemy *e)
     e->speed = 1;
     e->max_steps = 30;
 
-    e->img_size.x = 96; // (width of img / sprite size) :576/6 =96
-    e->img_size.y = 96; // image height
-    e->img_size.w = (e->img->w) / 6;
-    e->img_size.h = e->img->h;
+    e->img_size.x = 0;
+    e->img_size.y = 0;
+    e->img_size.w = (e->img->w) / 6; // (width of img / sprite size) :576/6 =96px
+    e->img_size.h = e->img->h;       // image height = 96px
     e->img_pos.x = SCREEN_W / 2;
     e->img_pos.y = SCREEN_H / 2;
 }
 
 void drawEnemy(SDL_Surface *screen, enemy e)
 {
-    SDL_BlitSurface(e.img, &(e.img_pos), screen, &(e.img_pos));
+    SDL_BlitSurface(e.img, &(e.img_size), screen, &(e.img_pos));
 }
 
 void animateEnemy(enemy *e)
 {
-    static int frame = 0;                 // static variable to track current frame
-    e->img_pos.x = frame * e->img_size.w; // set x position based on frame
+    static int frame = 0;                  // static variable to track current frame
+    e->img_size.x = frame * e->img_size.w; // set x position based on frame
 
-    frame++; // increment frame counter
-    if (frame >= 6)
-    { // if we've reached the end of the sprite sheet, wrap around
-        frame = 0;
+    Uint32 current_time = SDL_GetTicks();
+    static Uint32 last_time = 0;
+    Uint32 delta_time = current_time - last_time;
+    if (delta_time >= 100)
+    {            // add a delay of 100 milliseconds between frames
+        frame++; // increment frame counter
+        if (frame >= 6)
+        { // if we've reached the end of the sprite sheet, wrap around
+            frame = 0;
+        }
+        last_time = current_time;
     }
 }
 

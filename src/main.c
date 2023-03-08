@@ -441,9 +441,9 @@ int main()
             imageDraw_lvl1(screen, lvl1);
             imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
 
+            drawEnemy(screen, enemy1);
             animateEnemy(&enemy1);
             moveEnemy(&enemy1, 1);
-            drawEnemy(screen, enemy1);
 
             while (SDL_PollEvent(&event))
             {
