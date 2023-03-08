@@ -16,6 +16,7 @@
 #include "../include/text.h"     //text header
 #include "../include/stars.h"    //stars header
 #include "../include/settings.h" //settings header
+#include "../include/enemy.h"
 
 // screen
 SDL_Surface *screen;
@@ -64,6 +65,9 @@ Mix_Chunk *clickFX;
 
 // text
 text author;
+
+// characters
+enemy enemy1;
 
 // logic
 SDL_Event event;
@@ -140,6 +144,9 @@ int main()
 
     // loading text
     textLoad(&author);
+
+    // loading enemy
+    initEnemy(&enemy1);
 
     //* loading settings menu images
     //? maybe add background instead of solid color for settings menu
@@ -439,6 +446,10 @@ int main()
             imageDraw_lvlmenutitle(screen, startMenuTitle);
             imageDraw_lvl1(screen, lvl1);
             imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
+
+            animateEnemy(&enemy1);
+            moveEnemy(&enemy1, 15);
+            drawEnemy(screen, enemy1);
 
             while (SDL_PollEvent(&event))
             {
