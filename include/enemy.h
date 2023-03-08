@@ -3,18 +3,21 @@
 
 typedef struct
 {
-    SDL_Rect img_pos;
-    SDL_Rect img_size;
-    SDL_Surface *img;
-    int direction; // 0 for idle, 1 for right , 2 for left
-    float speed;
-    int max_steps;
+    SDL_Rect img_pos;  // position of the sprite on the screen
+    SDL_Rect img_size; // size of the sprite
+    SDL_Surface *img;  // pointer to the sprite image
+    int direction;     // 0 for idle, 1 for right , 2 for left
+    float speed;       // steps per frame
+    int max_steps;     // maximum number of steps before changing direction
+    int idle_time;     // time when the enemy started idling
+    int x;             // position of the enemy in the grid (screen coordinates)
+    int y;             // position of the enemy in the grid (screen coordinates)
 } enemy;
 
 void initEnemy(enemy *e);
 void drawEnemy(SDL_Surface *screen, enemy e);
-void animateEnemy(enemy *e);
-void moveEnemy(enemy *e, float speed);
+void animateEnemy(enemy *e, int direction);
+void moveEnemy(enemy *e); //! added new parameter dont forget
 // TODO : add collision detection
 
 #endif
