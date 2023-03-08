@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "constants.h" // for constants
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h> //for loading images
@@ -10,7 +11,6 @@
 #include <SDL/SDL_mixer.h> //for loading sounds
 
 // including the headers
-
 #include "../include/menu.h"     //menu header
 #include "../include/music.h"    //music header
 #include "../include/text.h"     //text header
@@ -20,12 +20,6 @@
 
 // screen
 SDL_Surface *screen;
-#define SCREEN_W 1280
-#define SCREEN_H 720 // screen height and width
-
-#define STARS_COUNT 100 // number of stars //! need locking
-#define STARS_LAYERS 4  // number of stars variations
-#define DELTA_TIME 16   // 1000ms / 60fps = 16.6666
 
 //* regular -> hovered -> clicked
 // images (_C for clicked) (_H for hovered)
@@ -448,7 +442,7 @@ int main()
             imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
 
             animateEnemy(&enemy1);
-            moveEnemy(&enemy1, 15);
+            moveEnemy(&enemy1, 1);
             drawEnemy(screen, enemy1);
 
             while (SDL_PollEvent(&event))

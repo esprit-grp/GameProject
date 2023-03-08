@@ -1,5 +1,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include "constants.h"
 #include "enemy.h"
 
 void initEnemy(enemy *e)
@@ -10,15 +11,15 @@ void initEnemy(enemy *e)
         printf("Error loading enemy image: %s\n", SDL_GetError());
     }
     e->direction = 1;
-    e->speed = 2;
+    e->speed = 1;
     e->max_steps = 30;
 
     e->img_size.x = 96; // (width of img / sprite size) :576/6 =96
     e->img_size.y = 96; // image height
     e->img_size.w = (e->img->w) / 6;
     e->img_size.h = e->img->h;
-    e->img_pos.x = 1280 / 2;
-    e->img_pos.y = 720 / 2;
+    e->img_pos.x = SCREEN_W / 2;
+    e->img_pos.y = SCREEN_H / 2;
 }
 
 void drawEnemy(SDL_Surface *screen, enemy e)
