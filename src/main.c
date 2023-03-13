@@ -62,6 +62,7 @@ text author;
 
 // characters
 enemy enemy1;
+enemy enemy2;
 
 // logic
 SDL_Event event;
@@ -141,6 +142,7 @@ int main()
 
     // loading enemy
     initEnemy(&enemy1);
+    initEnemytest(&enemy2);
 
     //* loading settings menu images
     //? maybe add background instead of solid color for settings menu
@@ -443,6 +445,14 @@ int main()
 
             drawEnemy(screen, enemy1);
             moveEnemy(&enemy1); //* moveEnemy will call animateEnemy
+            //************
+            drawEnemytest(screen, enemy2);
+            moveEnemytest(&enemy2); //* moveEnemy will call animateEnemy
+            //************
+            if (collisionBB(enemy1.img_pos, enemy2.img_pos) == 1)
+            {
+                printf(" collision detected \t");
+            }
 
             while (SDL_PollEvent(&event))
             {

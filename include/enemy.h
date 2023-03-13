@@ -18,6 +18,13 @@ void initEnemy(enemy *e);
 void drawEnemy(SDL_Surface *screen, enemy e);
 void animateEnemy(enemy *e, int direction);
 void moveEnemy(enemy *e); //! added new parameter dont forget
-// TODO : add collision detection
+int collisionBB(SDL_Rect player, SDL_Rect enemy);
+
+//****************************************************
+
+void initEnemytest(enemy *e);
+void drawEnemytest(SDL_Surface *screen, enemy e);
+void animateEnemytest(enemy *e, int direction);
+void moveEnemytest(enemy *e);
 
 #endif
