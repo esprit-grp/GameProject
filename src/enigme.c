@@ -1,3 +1,106 @@
+
+
+///-------------
+/*
+fichier.h
+
+c
+Copy code
+#ifndef FICHIER_H_INCLUDED
+#define FICHIER_H_INCLUDED
+
+#define MAX_LEN 256
+
+void write_file();
+void read_file();
+
+#endif // FICHIER_H_INCLUDED
+fichier.c
+
+c
+Copy code
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "fichier.h"
+
+void write_file() {
+    FILE *fichier = NULL;
+    char ligne[MAX_LEN];
+
+    fichier = fopen("fichier.txt", "w");
+    if (fichier == NULL) {
+        printf("Impossible de creer le fichier.\n");
+        return;
+    }
+    printf("Entrez le contenu du fichier (fin avec ctrl+d): \n");
+    while (fgets(ligne, MAX_LEN, stdin) != NULL) {
+        fputs(ligne, fichier);
+    }
+    fclose(fichier);
+    printf("Le fichier a ete enregistre.\n");
+}
+
+void read_file() {
+    FILE *fichier = NULL;
+    char ligne[MAX_LEN];
+    int nb_lignes = 0;
+    int ligne_aleatoire = 0;
+    int i = 0;
+    char choix;
+
+    srand(time(NULL));
+
+    fichier = fopen("fichier.txt", "r");
+    if (fichier == NULL) {
+        printf("Le fichier n'existe pas, voulez-vous le creer ? (o/n) ");
+        scanf(" %c", &choix);
+        if (choix == 'o') {
+            write_file();
+        } else {
+            printf("Operation annulee.\n");
+            return;
+        }
+    } else {
+        while (fgets(ligne, MAX_LEN, fichier) != NULL) {
+            nb_lignes++;
+        }
+        rewind(fichier);
+        ligne_aleatoire = (rand() % nb_lignes) + 1;
+        for (i = 0; i < ligne_aleatoire; i++) {
+            fgets(ligne, MAX_LEN, fichier);
+        }
+        printf("%s", ligne);
+        fclose(fichier);
+    }
+}
+main.c
+
+c
+Copy code
+#include <stdio.h>
+#include <stdlib.h>
+#include "fichier.h"
+
+int main()
+{
+    char choix;
+
+    printf("Voulez-vous lire ou ecrire dans le fichier ? (l/e) ");
+    scanf("%c", &choix);
+
+    if (choix == 'e') {
+        write_file();
+    } else if (choix == 'l') {
+        read_file();
+    } else {
+        printf("Choix invalide.\n");
+        return 1;
+    }
+
+    return 0;
+}*/
+///-------------
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
