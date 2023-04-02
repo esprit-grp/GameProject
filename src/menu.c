@@ -1,7 +1,9 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include "../include/menu.h"
-#include "constants.h"
+
+spacing = 14;    // spacing between the buttons (px)
+initial_y = 325; // intitial y pos //!LOCKED
 
 // load the images
 void imageLoad_background(image *img)
@@ -52,7 +54,7 @@ void imageLoad_playbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = INTIAL_BUTTON_Y;
+    img->img_pos.y = initial_y;
 }
 
 void imageLoad_settingsbutton(image *img)
@@ -70,7 +72,7 @@ void imageLoad_settingsbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = INTIAL_BUTTON_Y + img->img_size.h + BUTTON_SPACING;
+    img->img_pos.y = initial_y + img->img_size.h + spacing;
 }
 
 void imageLoad_quitbutton(image *img)
@@ -87,7 +89,7 @@ void imageLoad_quitbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = INTIAL_BUTTON_Y + img->img_size.h * 2 + BUTTON_SPACING * 2;
+    img->img_pos.y = initial_y + img->img_size.h * 2 + spacing * 2;
 }
 
 // load the Clicked images
@@ -105,7 +107,7 @@ void imageLoadClicked_playbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = INTIAL_BUTTON_Y;
+    img->img_pos.y = initial_y;
 }
 
 void imageLoadClicked_settingsbutton(image *img)
@@ -122,7 +124,7 @@ void imageLoadClicked_settingsbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = INTIAL_BUTTON_Y + img->img_size.h + BUTTON_SPACING;
+    img->img_pos.y = initial_y + img->img_size.h + spacing;
 }
 
 void imageLoadClicked_quitbutton(image *img)
@@ -139,7 +141,7 @@ void imageLoadClicked_quitbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = INTIAL_BUTTON_Y + img->img_size.h * 2 + BUTTON_SPACING * 2;
+    img->img_pos.y = initial_y + img->img_size.h * 2 + spacing * 2;
 }
 
 // load the hovered images
@@ -157,7 +159,7 @@ void imageLoadHovered_playbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = INTIAL_BUTTON_Y;
+    img->img_pos.y = initial_y;
 }
 
 void imageLoadHovered_settingsbutton(image *img)
@@ -174,7 +176,7 @@ void imageLoadHovered_settingsbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = INTIAL_BUTTON_Y + img->img_size.h + BUTTON_SPACING;
+    img->img_pos.y = initial_y + img->img_size.h + spacing;
 }
 
 void imageLoadHovered_quitbutton(image *img)
@@ -191,7 +193,7 @@ void imageLoadHovered_quitbutton(image *img)
     img->img_size.w = img->img->w;
     img->img_size.h = img->img->h;
     img->img_pos.x = ((SCREEN_W / 2) - (img->img_size.w / 2));
-    img->img_pos.y = INTIAL_BUTTON_Y + img->img_size.h * 2 + BUTTON_SPACING * 2;
+    img->img_pos.y = initial_y + img->img_size.h * 2 + spacing * 2;
 }
 
 // draw the images

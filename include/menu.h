@@ -1,6 +1,9 @@
 
 #ifndef MENU_H
 #define MENU_H
+
+#define SCREEN_W 1280
+#define SCREEN_H 720 // screen height and width
 typedef struct
 {
 
@@ -43,6 +46,7 @@ void imageDrawClicked_playbutton(SDL_Surface *screen, image img);
 void imageDrawClicked_settingsbutton(SDL_Surface *screen, image img);
 void imageDrawClicked_quitbutton(SDL_Surface *screen, image img);
 
+
 void imageDrawHovered_playbutton(SDL_Surface *screen, image img);
 void imageDrawHovered_settingsbutton(SDL_Surface *screen, image img);
 void imageDrawHovered_quitbutton(SDL_Surface *screen, image img);
@@ -50,5 +54,6 @@ void imageDrawHovered_quitbutton(SDL_Surface *screen, image img);
 // TODO make universal functions .h and .c files
 //**UNIVERSAL FUNCTION**//
 //  free buttons
+
 
 #endif

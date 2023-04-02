@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "constants.h" // for constants
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h> //for loading images
@@ -11,15 +10,23 @@
 #include <SDL/SDL_mixer.h> //for loading sounds
 
 // including the headers
+
 #include "../include/menu.h"     //menu header
 #include "../include/music.h"    //music header
 #include "../include/text.h"     //text header
 #include "../include/stars.h"    //stars header
 #include "../include/settings.h" //settings header
-#include "../include/enemy.h"
+#include "../include/background.h" 
 
 // screen
 SDL_Surface *screen;
+#define SCREEN_W 1280
+#define SCREEN_H 720 // screen height and width
+
+#define STARS_COUNT 100 // number of stars //! need locking
+#define STARS_LAYERS 4  // number of stars variations
+#define DELTA_TIME 16   // 1000ms / 60fps = 16.6666
+
 
 //* regular -> hovered -> clicked
 // images (_C for clicked) (_H for hovered)
@@ -57,12 +64,12 @@ image lvl1;
 Mix_Music *music;
 Mix_Chunk *clickFX;
 
+
+// HENI BACKGROUND
+background bg1;
+
 // text
 text author;
-
-// characters
-enemy enemy1;
-enemy enemy2;
 
 // logic
 SDL_Event event;
@@ -140,10 +147,6 @@ int main()
     // loading text
     textLoad(&author);
 
-    // loading enemy
-    initEnemy(&enemy1);
-    initEnemytest(&enemy2);
-
     //* loading settings menu images
     //? maybe add background instead of solid color for settings menu
 
@@ -162,6 +165,11 @@ int main()
 
     // uint32 return time in milliseconds
     Uint32 last_time = SDL_GetTicks();
+
+    // HENI LOADING BACKGROUND
+    initBack(&bg1);
+
+
 
     /*
      ********************
@@ -437,22 +445,8 @@ int main()
             }
             break;
         case 2:
-            // start (play) menu
-            SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 179, 254, 254)); // light blue
-            imageDraw_lvlmenutitle(screen, startMenuTitle);
-            imageDraw_lvl1(screen, lvl1);
-            imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
+            afficherBack(bg1, screen);
 
-            drawEnemy(screen, enemy1);
-            moveEnemy(&enemy1); //* moveEnemy will call animateEnemy
-            //************
-            drawEnemytest(screen, enemy2);
-            moveEnemytest(&enemy2); //* moveEnemy will call animateEnemy
-            //************
-            if (collisionBB(enemy1.img_pos, enemy2.img_pos) == 1)
-            {
-                printf(" collision detected \t");
-            }
 
             while (SDL_PollEvent(&event))
             {
