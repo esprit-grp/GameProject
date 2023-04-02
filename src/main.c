@@ -16,6 +16,7 @@
 #include "../include/text.h"     //text header
 #include "../include/stars.h"    //stars header
 #include "../include/settings.h" //settings header
+#include "../include/background.h" 
 
 // screen
 SDL_Surface *screen;
@@ -25,6 +26,7 @@ SDL_Surface *screen;
 #define STARS_COUNT 100 // number of stars //! need locking
 #define STARS_LAYERS 4  // number of stars variations
 #define DELTA_TIME 16   // 1000ms / 60fps = 16.6666
+
 
 //* regular -> hovered -> clicked
 // images (_C for clicked) (_H for hovered)
@@ -61,6 +63,10 @@ image lvl1;
 // music
 Mix_Music *music;
 Mix_Chunk *clickFX;
+
+
+// HENI BACKGROUND
+background bg1;
 
 // text
 text author;
@@ -159,6 +165,11 @@ int main()
 
     // uint32 return time in milliseconds
     Uint32 last_time = SDL_GetTicks();
+
+    // HENI LOADING BACKGROUND
+    initBack(&bg1);
+
+
 
     /*
      ********************
@@ -434,11 +445,8 @@ int main()
             }
             break;
         case 2:
-            // start (play) menu
-            SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 179, 254, 254)); // light blue
-            imageDraw_lvlmenutitle(screen, startMenuTitle);
-            imageDraw_lvl1(screen, lvl1);
-            imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
+            afficherBack(bg1, screen);
+
 
             while (SDL_PollEvent(&event))
             {
