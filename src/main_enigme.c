@@ -206,8 +206,7 @@ int score = 100;
 
 	 	    textSurface = TTF_RenderText_Solid(font, "Score: 100", textColor);
 
-                    textLocation.x = 560;
-
+                textLocation.x = 560;
     		    textLocation.y =  42;
 
                     SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
@@ -378,6 +377,8 @@ while (!done) {
 
 }
 
+
+// Free the allocated memory
 SDL_FreeSurface(background);
 
 SDL_FreeSurface(textSurface);
