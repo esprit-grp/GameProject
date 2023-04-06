@@ -157,8 +157,8 @@ int main(void) {
                     if (event.key.keysym.sym == SDLK_h) {
 
                         show_enigme = true; 
-
-                        // Render the background image
+                         
+                        
 
 			 SDL_BlitSurface(background, NULL, screen, NULL);
 
@@ -244,7 +244,7 @@ int score = 100;
 	SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
 
 	SDL_Flip(screen);
-
+    
 
 
 bool done = false;
@@ -256,6 +256,27 @@ Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
 congratulations_music = Mix_LoadMUS("Congratulations.mp3");
 
 wrong_music = Mix_LoadMUS("wrong.mp3");
+//----------------
+bool fullscreen = false;
+
+void toggle_fullscreen()
+{
+    // If we're already in full-screen mode, switch back to windowed mode
+    if (fullscreen)
+    {
+        SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+        fullscreen = false;
+    }
+    else // Otherwise, switch to full-screen mode
+    {
+        SDL_SetVideoMode(0, 0, 0, SDL_HWSURFACE | SDL_FULLSCREEN | SDL_DOUBLEBUF);
+        fullscreen = true;
+    }
+}
+
+
+
+
 
 
 
@@ -273,8 +294,10 @@ while (!done) {
 
                 break;
 
+             if (event.key.keysym.sym == SDLK_f)
+                toggle_fullscreen();
+            break;
             default:
-
                 break;
 
         }
