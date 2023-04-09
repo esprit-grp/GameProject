@@ -8,9 +8,7 @@
 
 #include <SDL/SDL_ttf.h>
 
-
-
-void afficherEnigme(Enigme e, SDL_Surface *screen, TTF_Font *font, SDL_Color textColor) 
+void afficherEnigme(Enigme e, SDL_Surface *screen, TTF_Font *font, SDL_Color textColor)
 
 {
 
@@ -18,9 +16,9 @@ void afficherEnigme(Enigme e, SDL_Surface *screen, TTF_Font *font, SDL_Color tex
 
     SDL_Surface *reponseSurface = TTF_RenderText_Solid(font, e.reponse, textColor);
 
-    SDL_Rect questionLocation = { 0, 0, 0 };
+    SDL_Rect questionLocation = {0, 0, 0};
 
-    SDL_Rect reponseLocation = { 0, 0, 0 };
+    SDL_Rect reponseLocation = {0, 0, 0};
 
     questionLocation.x = (screen->w - questionSurface->w) / 2;
 
@@ -37,18 +35,10 @@ void afficherEnigme(Enigme e, SDL_Surface *screen, TTF_Font *font, SDL_Color tex
     SDL_FreeSurface(questionSurface);
 
     SDL_FreeSurface(reponseSurface);
-
-    SDL_Flip(screen);
-
 }
 
-
-
-
-
-void genererEnigme(Enigme *p, char *nomfichier) {
-
-
+void genererEnigme(Enigme *p, char *nomfichier)
+{
 
     srand(time(NULL));
 
@@ -58,18 +48,18 @@ void genererEnigme(Enigme *p, char *nomfichier) {
 
     FILE *fp = fopen(nomfichier, "r");
 
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
 
         printf("Impossible d'ouvrir le fichier\n");
 
         return;
-
     }
 
-    while (fgets(ligne, 100, fp) != NULL) {
+    while (fgets(ligne, 100, fp) != NULL)
+    {
 
         num_lines++;
-
     }
 
     fclose(fp);
@@ -78,18 +68,18 @@ void genererEnigme(Enigme *p, char *nomfichier) {
 
     fp = fopen(nomfichier, "r");
 
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
 
         printf("Impossible d'ouvrir le fichier\n");
 
         return;
-
     }
 
-    for (i = 0; i < random_index; i++) {
+    for (i = 0; i < random_index; i++)
+    {
 
         fgets(ligne, 100, fp);
-
     }
 
     fgets(p->question, 100, fp);
@@ -97,7 +87,6 @@ void genererEnigme(Enigme *p, char *nomfichier) {
     fgets(p->reponse, 100, fp);
 
     fclose(fp);
-
 }
 
 /*
@@ -154,14 +143,6 @@ void animerEnigme(Enigme* e)
 
         SDL_BlitSurface(rotated_sand_watch, NULL, screen, &rect);
 
-
-
-        // Update the screen
-
-        SDL_Flip(screen);
-
-
-
         // Delay the loop to control the animation speed
 
         SDL_Delay(10);
@@ -195,4 +176,3 @@ void animerEnigme(Enigme* e)
 
 
 */
-
