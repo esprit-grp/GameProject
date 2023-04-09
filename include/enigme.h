@@ -10,9 +10,9 @@
 
 typedef struct {
 
-     char question[100];
+     char question[200];
 
-     char reponse[100];
+     char reponse[200];
 
      char reponse2[100];
 
@@ -36,6 +36,16 @@ typedef struct {
 
     SDL_Color textColor_RED;
 
+    SDL_Surface *spriteSheet;
+
+    int currentFrame;
+
+    Uint16 frameWidth;
+
+    Uint16 frameHeight;
+
+    int totalFrames;
+
 } Enigme;
 
 
@@ -44,7 +54,7 @@ void afficherEnigme(Enigme e, SDL_Surface* screen, TTF_Font* font, SDL_Color tex
 
 void genererEnigme(Enigme* p, char* nomfichier);
 
-//void animerEnigme(Enigme * e);
+void animerEnigme(Enigme *e, SDL_Surface *screen);
 
 
 

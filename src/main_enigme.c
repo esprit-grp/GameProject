@@ -18,7 +18,13 @@
 
 
 
+#define SPRITE_WIDTH 250
 
+#define SPRITE_HEIGHT 280  
+
+#define TOTAL_FRAMES 30
+
+  
 
 int main(void) {
 
@@ -82,10 +88,6 @@ int main(void) {
 
 
 
-      //--------------------------------------------------------------------
-
-    
-
     // Load background image
 
     SDL_Surface *background = IMG_Load("background.png");
@@ -118,7 +120,37 @@ int main(void) {
 
     //----------------------------------------------------------------------
 
-       
+     SDL_Surface  *spriteSheet, *currentFrame;
+
+    SDL_Rect framePosition;
+
+    int frame = 0;
+
+    Uint32 frameStart;
+
+     // Load the sprite sheet
+
+    spriteSheet = IMG_Load("horses.png");
+
+
+
+    // Set up the frame position and size
+
+    framePosition.x = -30;
+
+    framePosition.y = -30;
+
+    framePosition.w = SPRITE_WIDTH+35;
+
+    framePosition.h = SPRITE_HEIGHT;
+
+
+
+    // Start the frame timer
+
+    frameStart = SDL_GetTicks();
+
+    //----------------------------------------------------------------------
 
 		 
 
@@ -140,9 +172,7 @@ int main(void) {
 
     	SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
 
-   	SDL_Flip(screen);
-
-   	SDL_FreeSurface(textSurface);
+   	
 
    	//---
 
@@ -157,14 +187,12 @@ int main(void) {
                     if (event.key.keysym.sym == SDLK_h) {
 
                         show_enigme = true; 
-                         
-                        
 
-			 SDL_BlitSurface(background, NULL, screen, NULL);
+                        // Render the background image
 
-			  SDL_Flip(screen);
+			 SDL_BlitSurface(background, NULL, screen, NULL);                         
 
-			
+                        SDL_Flip(screen);
 
                     }
 
@@ -198,22 +226,91 @@ int main(void) {
 
         }
 
+
+
+     // Set the current frame
+
+        currentFrame = SDL_CreateRGBSurface(SDL_SWSURFACE, SPRITE_WIDTH, SPRITE_HEIGHT, 32, 0, 0, 0, 0);
+
+        SDL_Rect source = {frame * SPRITE_WIDTH, 0, SPRITE_WIDTH, SPRITE_HEIGHT};
+
+        SDL_BlitSurface(spriteSheet, &source, currentFrame, NULL);
+
+
+
+        // Draw the current frame to the screen
+
+        SDL_BlitSurface(currentFrame, NULL, screen, &framePosition);
+
+
+
+        // Update the screen
+
+        SDL_Flip(screen);
+
+
+
+      
+
+        
+
     }
 
 
 
+
+
+//score
+
 int score = 100;
 
-	 	    textSurface = TTF_RenderText_Solid(font, "Score: 100", textColor);
 
-                textLocation.x = 560;
-    		    textLocation.y =  42;
 
-                    SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
+// Convert the score to a string
 
-                    SDL_Flip(screen);
+char scoreStr[20];
 
-                    SDL_FreeSurface(textSurface); 
+sprintf(scoreStr, "Score: %d", score);
+
+
+
+// Create a surface for the text
+
+textSurface = TTF_RenderText_Solid(font, scoreStr, textColor);
+
+
+
+// Free the text surface
+
+SDL_FreeSurface(textSurface);
+
+
+
+// Update the score text
+
+sprintf(scoreStr, "Score: %d", score);
+
+textSurface = TTF_RenderText_Solid(font, scoreStr, textColor);
+
+
+
+// Blit the updated score text to the screen
+
+textLocation.x = 560;
+
+textLocation.y = 42;
+
+SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
+
+SDL_Flip(screen);
+
+
+
+// Free the updated score text surface
+
+SDL_FreeSurface(textSurface);
+
+
 
 /*
 
@@ -223,15 +320,9 @@ int score = 100;
 
   */
 
-    textSurface = TTF_RenderText_Solid(font, e.question, textColor);
 
-    textLocation.x = ((screen->w - textSurface->w) / 2)-90;
 
-    textLocation.y = ((screen->h - textSurface->h) / 2)+50;
-
-    SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
-
-    SDL_Flip(screen);
+afficherEnigme(e, screen, font, textColor);
 
     // Add code to display the prompt for choosing the right response
 
@@ -244,8 +335,14 @@ int score = 100;
 	SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
 
 	SDL_Flip(screen);
-    
 
+
+
+
+
+
+
+		
 
 bool done = false;
 
@@ -256,27 +353,6 @@ Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
 congratulations_music = Mix_LoadMUS("Congratulations.mp3");
 
 wrong_music = Mix_LoadMUS("wrong.mp3");
-//----------------
-bool fullscreen = false;
-
-void toggle_fullscreen()
-{
-    // If we're already in full-screen mode, switch back to windowed mode
-    if (fullscreen)
-    {
-        SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
-        fullscreen = false;
-    }
-    else // Otherwise, switch to full-screen mode
-    {
-        SDL_SetVideoMode(0, 0, 0, SDL_HWSURFACE | SDL_FULLSCREEN | SDL_DOUBLEBUF);
-        fullscreen = true;
-    }
-}
-
-
-
-
 
 
 
@@ -292,17 +368,69 @@ while (!done) {
 
                 done = true;
 
+          SDL_FreeSurface(spriteSheet);
+
                 break;
 
-             if (event.key.keysym.sym == SDLK_f)
-                toggle_fullscreen();
-            break;
             default:
+
                 break;
 
         }
 
     }       
+
+    //---------------------------------------
+
+      // Calculate which frame to display
+
+        Uint32 elapsed = SDL_GetTicks() - frameStart;
+
+        if (elapsed >= (33000) / TOTAL_FRAMES) {
+
+            frame++;
+
+            if (frame >= TOTAL_FRAMES) {
+
+                frame = 0;
+
+            }
+
+            frameStart = SDL_GetTicks();
+
+        }
+
+
+
+        // Set the current frame
+
+        currentFrame = SDL_CreateRGBSurface(SDL_SWSURFACE, SPRITE_WIDTH, SPRITE_HEIGHT, 32, 0, 0, 0, 0);
+
+        SDL_Rect source = {frame * SPRITE_WIDTH, 0, SPRITE_WIDTH, SPRITE_HEIGHT};
+
+        SDL_BlitSurface(spriteSheet, &source, currentFrame, NULL);
+
+
+
+        // Draw the current frame to the screen
+
+        SDL_BlitSurface(currentFrame, NULL, screen, &framePosition);
+
+
+
+        // Update the screen
+
+        SDL_Flip(screen);
+
+
+
+        // Free the current frame
+
+        SDL_FreeSurface(currentFrame);
+
+        
+
+    //---------------------------------------
 
     // Check if user clicked in a specific zone
 
@@ -310,21 +438,29 @@ while (!done) {
 
     while (SDL_PollEvent(&clickEvent)) {
 
-        if (clickEvent.type == SDL_MOUSEBUTTONDOWN) {
+       if (clickEvent.type == SDL_MOUSEBUTTONDOWN) {
 
-            int x = clickEvent.button.x;
+        int x = clickEvent.button.x;
 
-            int y = clickEvent.button.y;
+        int y = clickEvent.button.y;
 
-            if (x >600 && x < 920&& y > 300 && y < 440) {
+
+
+        // Check if the word "hannibal" is present in the text file
+
+
+
+            // Check if the click event occurred in the specific zone
+
+            if (x > 600 && x < 920 && y > 300 && y < 440) {
 
                 // User clicked in the correct zone
 
                 Mix_PlayMusic(congratulations_music, 1);
 
-		//score += 10;
+                score += 10;
 
-                textSurface = TTF_RenderText_Solid(font, "            **Congratulations!**  ", textColor_GREEN);                   
+                textSurface = TTF_RenderText_Solid(font, "            **Congratulations!**  ", textColor_GREEN);
 
                 textLocation.x = 560;
 
@@ -332,53 +468,65 @@ while (!done) {
 
                 // Render the background-wrong image
 
-		 SDL_BlitSurface(backgroundwrong, NULL, screen, NULL);
+                SDL_BlitSurface(backgroundwrong, NULL, screen, NULL);
 
-		  
+                score += 10;
 
-            } 
-
-            else {
+            } else {
 
                 // User clicked in the wrong zone
 
                 Mix_PlayMusic(wrong_music, 1);
 
-		//score -= 10;
+                score -= 10;
 
-                textSurface = TTF_RenderText_Solid(font, "Wrong!  (>_-_<) ", textColor_RED);                  
+                textSurface = TTF_RenderText_Solid(font, "Wrong!  (>_-_<) ", textColor_RED);
 
                 textLocation.x = 560;
 
                 textLocation.y = 550;
 
-		  // Render the background-wrong image
+                // Render the background-wrong image
 
-		 SDL_BlitSurface(backgroundwrong, NULL, screen, NULL);
+                SDL_BlitSurface(backgroundwrong, NULL, screen, NULL);
 
-		  
+                score -= 10;
 
-            }
+            }   
 
-            SDL_BlitSurface(textSurface, NULL, screen, &textLocation); //score  
+ 
 
-	    textSurface = TTF_RenderText_Solid(font, "Score: 100", textColor);
+		
 
-	    textLocation.x = 560;
+            // The word "hannibal" is not present in the text file
 
-            textLocation.y = 42;
+            // Handle this case as appropriate
 
-	            
+        
 
-            SDL_BlitSurface(textSurface, NULL, screen, &textLocation); // text file    
+                SDL_Flip(screen);
 
-            textSurface = TTF_RenderText_Solid(font, e.question, textColor);
+            
 
-	    textLocation.x = ((screen->w - textSurface->w) / 2)-90;
+		// Update the score text
 
-	    textLocation.y = ((screen->h - textSurface->h) / 2)+50;
+		sprintf(scoreStr, "Score: %d", score);
 
-	    
+		textSurface = TTF_RenderText_Solid(font, scoreStr, textColor);
+
+
+
+		// Blit the updated score text to the screen
+
+		textLocation.x = 560;
+
+		textLocation.y = 42;
+
+		SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
+
+		
+
+              afficherEnigme(e, screen, font, textColor);
 
             SDL_BlitSurface(textSurface, NULL, screen, &textLocation); // choose right reponse
 
@@ -388,20 +536,36 @@ while (!done) {
 
 	    textLocation.y = 220;
 
+
+
             SDL_BlitSurface(textSurface, NULL, screen, &textLocation);//wrong or Congratulation
 
-            SDL_Flip(screen);
+            SDL_Flip(screen);        
 
-        }
+        }    
 
-    }
-
-  
+    }	
 
 }
 
+ FILE* fp = fopen("last_score.txt", "w"); // Open the file in write mode
 
-// Free the allocated memory
+	if (fp != NULL) {
+
+	  fprintf(fp, "%d", score); 
+
+	  fclose(fp);  
+
+	}
+
+
+
+// Free the updated score text surface
+
+  SDL_FreeSurface(currentFrame);
+
+SDL_FreeSurface(textSurface);
+
 SDL_FreeSurface(background);
 
 SDL_FreeSurface(textSurface);

@@ -24,7 +24,7 @@ void afficherEnigme(Enigme e, SDL_Surface *screen, TTF_Font *font, SDL_Color tex
 
     questionLocation.x = (screen->w - questionSurface->w) / 2;
 
-    questionLocation.y = (screen->h - questionSurface->h) / 2 - 50;
+    questionLocation.y = (screen->h - questionSurface->h) / 2 + 50;
 
     reponseLocation.x = (screen->w - reponseSurface->w) / 2;
 
@@ -38,9 +38,11 @@ void afficherEnigme(Enigme e, SDL_Surface *screen, TTF_Font *font, SDL_Color tex
 
     SDL_FreeSurface(reponseSurface);
 
-    SDL_Flip(screen);
+  //  SDL_Flip(screen);
 
 }
+
+
 
 
 
@@ -72,7 +74,7 @@ void genererEnigme(Enigme *p, char *nomfichier) {
 
     }
 
-    fclose(fp);
+   fclose(fp);
 
     int random_index = rand() % (num_lines / 2) * 2;
 
@@ -100,99 +102,29 @@ void genererEnigme(Enigme *p, char *nomfichier) {
 
 }
 
-/*
 
-void animerEnigme(Enigme* e)
 
-{
+void animerEnigme(Enigme *e, SDL_Surface *screen) {
 
-    // Load the sand watch image
-
-    SDL_Surface* sand_watch = IMG_Load("sand_watch.png");
-
-    if (!sand_watch) {
-
-        printf("Error loading image: %s\n", IMG_GetError());
+    if (e == NULL || screen == NULL) {
 
         return;
 
     }
 
+    SDL_Rect srcRect = {e->currentFrame * 253, 0, 253, 253};
 
+    SDL_Rect dstRect = {100, 100, e->frameWidth, e->frameHeight};
 
-    // Set the angle and position of the sand watch
+    SDL_BlitSurface(e->spriteSheet, &srcRect, screen, &dstRect);
 
-    double angle = 0;
-
-    int x = 100;
-
-    int y = 100;
-
-
-
-    // Loop to animate the sand watch
-
-    while (true) {
-
-        // Clear the screen
-
-        SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
-
-
-
-        // Rotate the sand watch surface by the angle
-
-        SDL_Surface* rotated_sand_watch = rotozoomSurface(sand_watch, angle, 1.0, 0);
-
-        angle += 1;  // Increase the angle to make the sand watch rotate
-
-
-
-        // Blit the rotated sand watch surface onto the screen
-
-        SDL_Rect rect = { x, y, rotated_sand_watch->w, rotated_sand_watch->h };
-
-        SDL_BlitSurface(rotated_sand_watch, NULL, screen, &rect);
-
-
-
-        // Update the screen
-
-        SDL_Flip(screen);
-
-
-
-        // Delay the loop to control the animation speed
-
-        SDL_Delay(10);
-
-
-
-        // Free the rotated sand watch surface to avoid memory leaks
-
-        SDL_FreeSurface(rotated_sand_watch);
-
-
-
-        // Exit the loop if the animation duration is over
-
-        if ( check if the animation duration is over) {
-
-           // break;
-
-        }
-
-    }
-
-
-
-    // Free the sand watch surface to avoid memory leaks
-
-  //  SDL_FreeSurface(sand_watch);
+    e->currentFrame = (e->currentFrame + 1) % e->totalFrames;
 
 }
 
 
 
-*/
+
+
+
 
