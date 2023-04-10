@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include "constants.h"
@@ -32,7 +33,7 @@ void drawEnemy(SDL_Surface *screen, enemy e)
 
 void animateEnemy(enemy *e, int direction) //! added new parameter dont forget
 {
-    static int frame = 0; // static variable to track current frame
+    static int frame = 0;
     int row = 0;
     if (direction == 1)
     {
@@ -46,17 +47,17 @@ void animateEnemy(enemy *e, int direction) //! added new parameter dont forget
     {
         row = 2;
     }
-    e->img_size.x = frame * e->img_size.w; // set x position based on frame
-    e->img_size.y = row * e->img_size.h;   // set y position based on direction
+    e->img_size.x = frame * e->img_size.w;
+    e->img_size.y = row * e->img_size.h;
 
     Uint32 current_time = SDL_GetTicks();
     static Uint32 last_time = 0;
     Uint32 delta_time = current_time - last_time;
     if (delta_time >= 100)
-    {            // add a delay of 100 milliseconds between frames
-        frame++; // increment frame counter
+    {
+        frame++;
         if (frame >= 6)
-        { // if we've reached the end of the sprite sheet, wrap around
+        {
             frame = 0;
         }
         last_time = current_time;
@@ -72,8 +73,8 @@ void moveEnemy(enemy *e)
         if (e->img_pos.x >= e->x + e->max_steps)
         {
             e->img_pos.x = e->x + e->max_steps;
-            e->direction = 0;              // change direction to idle
-            e->idle_time = SDL_GetTicks(); // start idle time
+            e->direction = 0;
+            e->idle_time = SDL_GetTicks() + rand() % 1500 + 500;
         }
     }
     else if (e->direction == 2)
@@ -83,23 +84,23 @@ void moveEnemy(enemy *e)
         if (e->img_pos.x <= e->x)
         {
             e->img_pos.x = e->x;
-            e->direction = 0;              // change direction to idle
-            e->idle_time = SDL_GetTicks(); // start idle time
+            e->direction = 0;
+            e->idle_time = SDL_GetTicks() + rand() % 1500 + 500;
         }
     }
     else if (e->direction == 0)
     { // idle
         animateEnemy(e, 0);
         Uint32 current_time = SDL_GetTicks();
-        if (current_time - e->idle_time >= 2000)
+        if (current_time >= e->idle_time)
         { // check if idle time is over
             if (e->img_pos.x == e->x)
             {
-                e->direction = 1; // change direction to right
+                e->direction = 1;
             }
             else if (e->img_pos.x == e->x + e->max_steps)
             {
-                e->direction = 2; // change direction to left
+                e->direction = 2;
             }
         }
     }
@@ -110,11 +111,11 @@ int collisionBB(SDL_Rect player, SDL_Rect enemy)
     int collision = 0;
     if ((player.x + player.w < enemy.x) || (player.x > enemy.x + enemy.w) || (player.y + player.h < enemy.y) || (player.y > enemy.y + enemy.h))
     {
-        collision = 0; // no collision
+        collision = 0;
     }
     else
     {
-        collision = 1; // collision
+        collision = 1;
     }
     return collision;
 }
@@ -164,17 +165,17 @@ void animateEnemytest(enemy *e, int direction) //! added new parameter dont forg
     {
         row = 2;
     }
-    e->img_size.x = frame * e->img_size.w; // set x position based on frame
-    e->img_size.y = row * e->img_size.h;   // set y position based on direction
+    e->img_size.x = frame * e->img_size.w;
+    e->img_size.y = row * e->img_size.h;
 
     Uint32 current_time = SDL_GetTicks();
     static Uint32 last_time = 0;
     Uint32 delta_time = current_time - last_time;
     if (delta_time >= 100)
-    {            // add a delay of 100 milliseconds between frames
-        frame++; // increment frame counter
+    {
+        frame++;
         if (frame >= 6)
-        { // if we've reached the end of the sprite sheet, wrap around
+        {
             frame = 0;
         }
         last_time = current_time;
@@ -184,14 +185,14 @@ void animateEnemytest(enemy *e, int direction) //! added new parameter dont forg
 void moveEnemytest(enemy *e)
 {
     if (e->direction == 2)
-    { // move right
+    {
         animateEnemy(e, 1);
         e->img_pos.x += e->speed;
         if (e->img_pos.x >= e->x + e->max_steps)
         {
             e->img_pos.x = e->x + e->max_steps;
-            e->direction = 0;              // change direction to idle
-            e->idle_time = SDL_GetTicks(); // start idle time
+            e->direction = 0;
+            e->idle_time = SDL_GetTicks();
         }
     }
     else if (e->direction == 1)
@@ -201,23 +202,23 @@ void moveEnemytest(enemy *e)
         if (e->img_pos.x <= e->x)
         {
             e->img_pos.x = e->x;
-            e->direction = 0;              // change direction to idle
-            e->idle_time = SDL_GetTicks(); // start idle time
+            e->direction = 0;
+            e->idle_time = SDL_GetTicks();
         }
     }
     else if (e->direction == 0)
-    { // idle
+    {
         animateEnemy(e, 0);
         Uint32 current_time = SDL_GetTicks();
         if (current_time - e->idle_time >= 2000)
-        { // check if idle time is over
+        {
             if (e->img_pos.x == e->x)
             {
-                e->direction = 1; // change direction to right
+                e->direction = 1;
             }
             else if (e->img_pos.x == e->x + e->max_steps)
             {
-                e->direction = 2; // change direction to left
+                e->direction = 2;
             }
         }
     }
