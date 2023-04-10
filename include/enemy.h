@@ -17,7 +17,7 @@ typedef struct
 void initEnemy(enemy *e);
 void drawEnemy(SDL_Surface *screen, enemy e);
 void animateEnemy(enemy *e, int direction);
-void moveEnemy(enemy *e); //! added new parameter dont forget
+void moveEnemy(enemy *e);
 int collisionBB(SDL_Rect player, SDL_Rect enemy);
 
 //****************************************************
