@@ -65,18 +65,22 @@ text author;
 enemy enemy1;
 enemy enemy2;
 
+// enigme
+Enigme e;
+
 // logic
 SDL_Event event;
-int loop = 1;               // game loop
-int anim_B = 0;             // animation for the buttons
-int isButtonAnimated = 0;   // check if the button animated (to prevent FX spam)
-int selectedButton = 0;     // selected button (keyboard)
-int lastHoveredButton = -1; // last hovered button (keyboard and mouse) but made for keyboard
-int StopTheGame = 0;        // stop the game, if StopTheGame = 1 -> loop = 0
-int UI = 0;                 // UI = 0 -> main menu, UI = 1 -> settings menu, UI = 2 -> game
-int volume = 64;            // volume of the music (0 - 128)
-bool muteButtonOn = false;  // mute button state
-
+int loop = 1;                     // game loop
+int anim_B = 0;                   // animation for the buttons
+int isButtonAnimated = 0;         // check if the button animated (to prevent FX spam)
+int selectedButton = 0;           // selected button (keyboard)
+int lastHoveredButton = -1;       // last hovered button (keyboard and mouse) but made for keyboard
+int StopTheGame = 0;              // stop the game, if StopTheGame = 1 -> loop = 0
+int UI = 0;                       // UI = 0 -> main menu, UI = 1 -> settings menu, UI = 2 -> game
+int volume = 64;                  // volume of the music (0 - 128)
+bool muteButtonOn = false;        // mute button state
+static int collisionDetected = 0; // checks if collision detected
+static int enigmeDone = 0;        // checks if enigme is done
 /*
 ********************
 *****GAME BEGIN*****
@@ -161,6 +165,9 @@ int main()
     imageLoad_lvlmenutitle(&startMenuTitle);
     imageLoad_lvl1(&lvl1);
 
+    // loading enigme
+    genererEnigme(&e, "../assets/text/enigme.txt");
+
     // uint32 return time in milliseconds
     Uint32 last_time = SDL_GetTicks();
 
@@ -227,6 +234,8 @@ int main()
                             imageDrawClicked_playbutton(screen, playButton_C);
                             FXLoad(clickFX);
                             UI = 2;
+                            collisionDetected = 0;
+                            enigmeDone = 0;
                             break;
                         case 1:
                             // settings button pressed
@@ -450,9 +459,36 @@ int main()
             drawEnemytest(screen, enemy2);
             moveEnemytest(&enemy2); //* moveEnemy will call animateEnemy
             //************
-            if (collisionBB(enemy1.img_pos, enemy2.img_pos) == 1)
+            if (collisionBB(enemy1.img_pos, enemy2.img_pos) == 1 && collisionDetected == 0)
             {
                 printf(" collision detected \t");
+                collisionDetected = 1;
+            }
+            if (collisionDetected == 1 && enigmeDone == 0)
+            {
+                SDL_PumpEvents();
+                if (resolution(e) == -1)
+                {
+                    afficherEnigme(e, screen, -1);
+                    animerenigme(&e);
+                }
+                else
+                {
+                    if (resolution(e) == e.corr)
+                    {
+                        afficherEnigme(e, screen, 1);
+                        SDL_Delay(5000); //! remove SDL delay
+                        UI = 0;
+                        enigmeDone = 1;
+                    }
+                    else
+                    {
+                        afficherEnigme(e, screen, 0);
+                        SDL_Delay(5000); //! remove SDL delay
+                        UI = 0;
+                        enigmeDone = 1;
+                    }
+                }
             }
 
             while (SDL_PollEvent(&event))
