@@ -17,6 +17,7 @@
 #include "../include/stars.h"    //stars header
 #include "../include/settings.h" //settings header
 #include "../include/enemy.h"
+#include "../include/enigme_fichier.h"
 
 // screen
 SDL_Surface *screen;

@@ -1,7 +1,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include "constants.h"
-#include "enemy.h"
+#include "../include/constants.h"
+#include "../include/enemy.h"
 
 void initEnemy(enemy *e)
 {
@@ -12,9 +12,9 @@ void initEnemy(enemy *e)
     }
     e->direction = 1;
     e->speed = 1;
-    e->max_steps = 100;
+    e->max_steps = 300;
     e->idle_time = 2000;
-    e->x = (SCREEN_W / 2 - (e->img->w / 6) - 96 / 2) + 100; // screen width - (width of img / sprite size) - (width of sprite / 2)
+    e->x = (SCREEN_W / 2 - (e->img->w / 6) - 96 / 2) - 100; // screen width - (width of img / sprite size) - (width of sprite / 2)
     e->y = (SCREEN_H / 2 - (e->img->h / 3) - 96 / 2) + 100; // screen height - (height of img / sprite size) - (height of sprite / 2)
 
     e->img_size.x = 0;
