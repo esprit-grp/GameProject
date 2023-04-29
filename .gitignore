@@ -3,6 +3,7 @@ test/
 .vscode/
 test.c
 test2.c
+html/ #doxygen folder
 
 # Prerequisites
 *.d

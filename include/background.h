@@ -1,149 +1,137 @@
+/**
+ * @file background.h.c
+ * @brief the game loop code.
+ * @author the KingsMan team
+ * @version 0.3
+ * @date Apr 23, 2023
+ */
+
+/**
+
+@file background.h
+@brief Defines the background struct and related functions.
+*/
 #ifndef BACKGROUND_H
 #define BACKGROUND_H
 
-//#define SCREEN_W 1280
-//#define SCREEN_H 720 
 #include "menu.h"
-//structure du background
-typedef struct 
-{
-    SDL_Rect img_pos;  
-    SDL_Rect img_size; 
-    SDL_Surface *img;  
-    int scrollingSpeed; 
-    SDL_Rect camera_pos;
-    int direction;
-    char *filename;
-    posBack1(x = 0, y =(H_imgBack - H_screen)/2, w = W_screen/2, h = H_screen);
-    posscreen1(x = 0, y = 0, w = W_screen/2, h = H_screen);
-    posBack2(x = 0, y =(H_imgBack - H_screen)/2, w = W_screen/2, h = H_screen);
-    posscreen2(x = W, y = 0, w = W_screen/2, h = H_screen);
-}background;
+#include <SDL.h>
 
-typedef struct 
+/**
+
+@brief The struct representing a background image in the game.
+This struct contains information about the position and size of the background image,
+the SDL_Surface pointer to the actual image, the scrolling speed, the camera position,
+the scrolling direction and the filename of the image file.
+*/
+typedef struct
 {
-    int score;
-    int temps;
-    char playerName[20];
+        SDL_Rect img_pos;    //< The position of the background image. */
+        SDL_Rect img_size;   //< The size of the background image. */
+        SDL_Surface *img;    //< The SDL_Surface pointer to the background image. */
+        int scrollingSpeed;  //< The scrolling speed of the background image. */
+        SDL_Rect camera_pos; //< The position of the camera. */
+        int direction;       //< The direction of the scrolling. */
+        char *filename;      /**< The filename of the image file. */
+} background;
+
+/**
+
+@struct ScoreInfo
+@brief Struct representing the player's score and name.
+*/
+typedef struct
+{
+        int score;
+        / < Player 's score */ int temps; / < Time taken to achieve the score * / char playerName[20]; /**< Player' s name * /
 } ScoreInfo;
+/**
 
+@brief Initializes a background struct.
+@param b Pointer to the background struct to be initialized.
+*/
+void initBack(background *b);
+/**
 
-void initBack(background* b);
+@brief Displays a background image on the given screen.
+@param b The background struct containing the image to be displayed.
+@param screen The screen surface on which the image should be displayed.
+*/
 void afficherBack(background b, SDL_Surface *screen);
-void scrolling(SDL_Rect* b, int direction, int dx, int dy);
-void animerBack(background* b);
+/**
+
+@brief Scrolls the background image in the given direction by the given amount.
+@param b Pointer to the background struct representing the image to be scrolled.
+@param direction Direction of the scrolling (1 for right, -1 for left).
+@param dx Amount of horizontal scrolling.
+@param dy Amount of vertical scrolling.
+*/
+void scrolling(SDL_Rect *b, int direction, int dx, int dy);
+/**
+
+@brief Animates the background image by scrolling it.
+@param b Pointer to the background struct representing the image to be animated.
+*/
+void animerBack(background *b);
+/**
+
+@brief Loads the level 1 background image into the given image struct.
+@param img Pointer to the image struct to be loaded with the background image.
+*/
 void backgroundLoad_lvl1(image *img);
-void backgroundDraw_lvl1(SDL_Surface *screen,image *img);
+/**
+
+@brief Draws the level 1 background image on the given screen.
+@param screen The screen surface on which the image should be drawn.
+@param img Pointer to the image struct containing the background image to be drawn.
+*/
+void backgroundDraw_lvl1(SDL_Surface *screen, image *img);
+/**
+
+@brief Animates the level 1 background image by scrolling it.
+@param screen The screen surface on which the image should be animated.
+@param img Pointer to the image struct containing the background image to be animated.
+*/
 void backgroundAnimate_lvl1(SDL_Surface *screen, image *img);
+/**
+
+@brief Animates the background image by scrolling it.
+@param screen The screen surface on which the image should be animated.
+@param img Pointer to the image struct containing the background image to be animated.
+*/
 void backgroundAnimate(SDL_Surface *screen, image *img);
+/**
+
+@brief Loads the background image into the given image struct.
+@param img Pointer to the image struct to be loaded with the background image.
+*/
 void backgroundLoad(image *img);
+/**
+
+@brief Animates the background image by scrolling it.
+@param screen The screen surface on which the image should be animated.
+@param img Pointer to the image struct containing the background image to be animated.
+*/
 void backgroundAnimate2(SDL_Surface *screen, image *img);
+/**
+
+@brief Saves the given score information to a file.
+@param s The score information struct to be saved.
+@param fileName The name of the file to which the score information should be written.
+*/
 void saveScore(ScoreInfo s, char *fileName);
+/**
+
+@brief Reads the top three scores from the given file into an array of ScoreInfo structs.
+@param filename The name of the file from which the scores should be read.
+@param trois Pointer to the array of ScoreInfo structs to be filled with the scores.
+*/
 void bestScore(char *filename, ScoreInfo trois[]);
+/**
+
+@brief Displays the top three scores on the given screen.
+@param screen The screen surface on which the scores should be displayed.
+@param t The array of ScoreInfo structs containing the top three scores.
+*/
 void afficherBest(SDL_Surface *screen, ScoreInfo t[]);
-
 #endif
-
-
-
-
-
-void playMultiplayer()
-{
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
-        printf("SDL_Init Error: %s\n", SDL_GetError());
-        return;
-    }
-
-    // Create SDL window
-    SDL_Window* window = SDL_CreateWindow("Multiplayer Game",
-                                          SDL_WINDOWPOS_CENTERED,
-                                          SDL_WINDOWPOS_CENTERED,
-                                          SCREEN_WIDTH, SCREEN_HEIGHT,
-                                          SDL_WINDOW_SHOWN);
-
-    if (window == NULL)
-    {
-        printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
-        return;
-    }
-
-    // Create SDL renderer
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-    if (renderer == NULL)
-    {
-        printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
-        return;
-    }
-
-    // Create player 1 and player 2 surfaces
-    SDL_Surface* player1Surface = IMG_Load("../assets/player1.png");
-    SDL_Surface* player2Surface = IMG_Load("../assets/player2.png");
-
-    if (player1Surface == NULL || player2Surface == NULL)
-    {
-        printf("Unable to load player images Error: %s\n", SDL_GetError());
-        return;
-    }
-
-    // Create textures for player 1 and player 2 surfaces
-    SDL_Texture* player1Texture = SDL_CreateTextureFromSurface(renderer, player1Surface);
-    SDL_Texture* player2Texture = SDL_CreateTextureFromSurface(renderer, player2Surface);
-
-    if (player1Texture == NULL || player2Texture == NULL)
-    {
-        printf("Unable to create player textures Error: %s\n", SDL_GetError());
-        return;
-    }
-
-    // Free player 1 and player 2 surfaces as they are no longer needed
-    SDL_FreeSurface(player1Surface);
-    SDL_FreeSurface(player2Surface);
-
-    // Split screen into left and right parts
-    SDL_Rect leftScreen = {0, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT};
-    SDL_Rect rightScreen = {SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2, SCREEN_HEIGHT};
-
-    // Create player 1 and player 2 rects
-    SDL_Rect player1Rect = {100, 100, 50, 50};
-    SDL_Rect player2Rect = {SCREEN_WIDTH - 150, 100, 50, 50};
-
-    // Main game loop
-    bool quit = false;
-    SDL_Event e;
-    while (!quit)
-    {
-        // Handle events
-        while (SDL_PollEvent(&e))
-        {
-            if (e.type == SDL_QUIT)
-            {
-                quit = true;
-            }
-        }
-
-        // Clear renderer
-        SDL_RenderClear(renderer);
-
-        // Draw player 1 and player 2 in their respective parts of the screen
-        SDL_RenderCopy(renderer, player1Texture, NULL, &leftScreen);
-        SDL_RenderCopy(renderer, player2Texture, NULL, &rightScreen);
-
-        // Draw player 1 and player 2 rects
-        SDL_RenderFillRect(renderer, &player1Rect);
-        SDL_RenderFillRect(renderer, &player2Rect);
-
-        // Update renderer
-        SDL_RenderPresent(renderer);
-    }
-
-    // Free resources and quit SDL
-    SDL_DestroyTexture(player1Texture);
-    SDL_DestroyTexture(player2Texture);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-}

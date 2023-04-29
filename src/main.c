@@ -1,3 +1,10 @@
+/**
+ * @file main.c
+ * @brief the game loop code.
+ * @author the KingsMan team
+ * @version 0.3
+ * @date Apr 23, 2023
+ */
 // importing libraries
 #include <stdio.h>
 #include <stdlib.h>
