@@ -1,9 +1,22 @@
+/**
+ * @file enemy.c
+ * @brief enemy implemetation en C.
+ * @author Aymen Hmani
+ */
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include "../include/constants.h"
 #include "../include/enemy.h"
 
+/**
+ * @brief Initializes an enemy.
+ *
+ * This function loads the enemy image, sets initial values for enemy properties,
+ * and initializes the image position and size.
+ *
+ * @param e Pointer to the enemy structure to be initialized.
+ */
 void initEnemy(enemy *e)
 {
     e->img = IMG_Load("../assets/img/enemyrun.png");
@@ -26,11 +39,28 @@ void initEnemy(enemy *e)
     e->img_pos.y = e->y;
 }
 
+/**
+ * @brief Draws the enemy on the screen.
+ *
+ * This function blits the enemy image onto the specified screen surface at the enemy's image position.
+ *
+ * @param screen Pointer to the screen surface where the enemy will be drawn.
+ * @param e The enemy to be drawn.
+ */
 void drawEnemy(SDL_Surface *screen, enemy e)
 {
     SDL_BlitSurface(e.img, &(e.img_size), screen, &(e.img_pos));
 }
 
+/**
+ * @brief Animates the enemy based on the given direction.
+ *
+ * This function updates the image size of the enemy to display the appropriate frame based on the direction.
+ * It also handles the animation frame timing.
+ *
+ * @param e Pointer to the enemy structure to be animated.
+ * @param direction The direction of the enemy animation (0 = idle, 1 = right, 2 = left).
+ */
 void animateEnemy(enemy *e, int direction) //! added new parameter dont forget
 {
     static int frame = 0;
@@ -64,6 +94,14 @@ void animateEnemy(enemy *e, int direction) //! added new parameter dont forget
     }
 }
 
+/**
+ * @brief Moves the enemy according to its current direction.
+ *
+ * This function updates the enemy's image position based on its direction and speed.
+ * It also calls the animateEnemy function to update the animation frame.
+ *
+ * @param e Pointer to the enemy structure to be moved.
+ */
 void moveEnemy(enemy *e)
 {
     if (e->direction == 1)
@@ -106,6 +144,16 @@ void moveEnemy(enemy *e)
     }
 }
 
+/**
+ * @brief Checks for collision between two bounding boxes.
+ *
+ * This function determines whether there is a collision between the player's bounding box and the enemy's bounding box.
+ * It returns 1 if there is a collision, and 0 otherwise.
+ *
+ * @param player The bounding box of the player.
+ * @param enemy The bounding box of the enemy.
+ * @return 1 if there is a collision, 0 otherwise.
+ */
 int collisionBB(SDL_Rect player, SDL_Rect enemy)
 {
     int collision = 0;
@@ -120,7 +168,7 @@ int collisionBB(SDL_Rect player, SDL_Rect enemy)
     return collision;
 }
 
-//*******************************
+//**************TESTING FINCTIONS*****************
 
 void initEnemytest(enemy *e)
 {
