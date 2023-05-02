@@ -1,3 +1,5 @@
+#ifndef BACKGROUND_H
+#define BACKGROUND_H
 /**
  * @file background.h.c
  * @brief the game loop code.
@@ -11,11 +13,13 @@
 @file background.h
 @brief Defines the background struct and related functions.
 */
-#ifndef BACKGROUND_H
-#define BACKGROUND_H
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include "../include/menu.h"
+#include "constants.h"
 #include "menu.h"
-#include <SDL.h>
+
 
 /**
 
@@ -35,6 +39,7 @@ typedef struct
         char *filename;      /**< The filename of the image file. */
 } background;
 
+
 /**
 
 @struct ScoreInfo
@@ -43,7 +48,8 @@ typedef struct
 typedef struct
 {
         int score;
-        / < Player 's score */ int temps; / < Time taken to achieve the score * / char playerName[20]; /**< Player' s name * /
+         int temps;  
+         char playerName[20]; 
 } ScoreInfo;
 /**
 

@@ -14,6 +14,7 @@
 #include <SDL/SDL_ttf.h>
 #include "background.h"
 #include "menu.h"
+#include "constants.h"
 
 /**
  * @brief       Load the background image
@@ -57,7 +58,7 @@ void musicLoad1(Mix_Music *music)
     {
         printf("%s", Mix_GetError());
     }
-    music = Mix_LoadMUS("../assets/audio/music.mp3");
+    music = Mix_LoadMUS("../assets/audio/fff.mp3");
     if (music == NULL)
     {
         printf("unable to load music Error: %s.\n", Mix_GetError());
@@ -100,7 +101,7 @@ void scrolling(SDL_Rect *b, int direction, int dx, int dy)
  */
 void backgroundLoad_lvl1(image *img)
 {
-    img->filename = "../assets/img/ottoman.png";
+    img->filename = "../assets/img/otto.png";
     img->img = IMG_Load(img->filename);
     if (img->img == NULL)
     {
@@ -109,7 +110,7 @@ void backgroundLoad_lvl1(image *img)
     }
     img->img_size.x = 0;
     img->img_size.y = 0;
-    img->img_size.w = (img->img->w) / 5;
+    img->img_size.w = (img->img->w);
     img->img_size.h = (img->img->h);
     img->img_pos.x = 0;
     img->img_pos.y = 0;
@@ -120,38 +121,7 @@ void backgroundLoad_lvl1(image *img)
  * @param[in,out] screen    Pointer to the screen surface
  * @param[in]   img
  */
-
-/**
-
-Loads a specific image for level 1 background.
-@param img a pointer to the image structure to be filled with the image data
-*/
-void backgroundLoad_lvl1(image *img)
-{
-    img->filename = "../assets/img/ottoman.png";
-    img->img = IMG_Load(img->filename);
-    if (img->img == NULL)
-    {
-        printf("unable to load background Error: %s.\n", IMG_GetError());
-        return;
-    }
-    img->img_size.x = 0;
-    img->img_size.y = 0;
-    img->img_size.w = (img->img->w) / 5;
-    img->img_size.h = (img->img->h);
-    img->img_pos.x = 0;
-    img->img_pos.y = 0;
-}
-/**
-
-Draws the level 1 background image on the screen.
-@param screen the SDL_Surface to which the image is to be drawn
-@param img a pointer to the image structure to be drawn
-*/
-void backgroundDraw_lvl1(SDL_Surface *screen, image *img)
-{
-    SDL_BlitSurface(img->img, &img->img_size, screen, &img->img_pos);
-}
+ 
 /**
 
 Animates the level 1 background image on the screen.
@@ -177,90 +147,15 @@ void backgroundAnimate(SDL_Surface *screen, image *img)
 }
 /**
 
-Loads a generic background image.
-@param img a pointer to the image structure to be filled with the image data
-*/
-void backgroundLoad(image *img)
-{
-    img->filename = "../assets/img/sandglass5.png";
-    img->img = IMG_Load(img->filename);
-    if (img->img == NULL)
-    {
-        printf("unable to load background Error: %s.\n", IMG_GetError());
-        return;
-    }
-    img->img_size.x = 0;
-    img->img_size.y = 0;
-    img->img_size.w = (img->img->w) / 5;
-    img->img_size.h = (img->img->h);
-    img->img_pos.x = 0;
-    img->img_pos.y = 0;
-}
-/**
-
 Draws the generic background image on the screen.
 @param screen the SDL_Surface to which the image is to be drawn
 @param img a pointer to the image structure to be drawn
 */
-void backgroundDraw(SDL_Surface *screen, image *img)
+void backgroundDraw_lvl1(SDL_Surface *screen, image *img)
 {
     SDL_BlitSurface(img->img, &img->img_size, screen, &img->img_pos);
 }
 
-/**
-
-Animates the background image on the screen by changing its position.
-@param screen the SDL_Surface to which the image is to be animated
-@param img a pointer to the image structure to be animated
-*/
-void backgroundAnimate(SDL_Surface *screen, image *img)
-{
-    static int frame = 0;
-    static Uint32 last_time = 0;
-    Uint32 current_time = SDL_GetTicks();
-    if (current_time > last_time + 200)
-    {
-        frame++;
-        if (frame >= 5)
-        {
-            frame = 0;
-        }
-        img->img_size.x = frame * (img->img->w / 5);
-        last_time = current_time;
-    }
-    backgroundDraw_lvl1(screen, img);
-}
-/**
-
-Loads a generic background image and fills the image structure with its data.
-@param img a pointer to the image structure to be filled with the image data
-*/
-void backgroundLoad(image *img)
-{
-    img->filename = "../assets/img/sandglass5.png";
-    img->img = IMG_Load(img->filename);
-    if (img->img == NULL)
-    {
-        printf("unable to load background Error: %s.\n", IMG_GetError());
-        return;
-    }
-    img->img_size.x = 0;
-    img->img_size.y = 0;
-    img->img_size.w = (img->img->w) / 5;
-    img->img_size.h = (img->img->h);
-    img->img_pos.x = 0;
-    img->img_pos.y = 0;
-}
-/**
-
-Draws the background image onto the screen.
-@param screen the SDL_Surface onto which the image is to be drawn
-@param img a pointer to the image structure to be drawn
-*/
-void backgroundDraw(SDL_Surface *screen, image *img)
-{
-    SDL_BlitSurface(img->img, &img->img_size, screen, &img->img_pos);
-}
 /**
 
 Animates the background image on the screen by changing its position.
@@ -367,10 +262,11 @@ Displays the best three scores onto the screen.
 @param SCREEN_H the SDL_Surface onto which the scores are to be displayed
 @param t an array of three ScoreInfo structures containing the best scores to be displayed
 */
+/*
 void afficherBest(SDL_Surface *SCREEN_H, ScoreInfo t[])
 {
     SDL_BlitSurface(scoreSurface[0], NULL, screen, &scorePosition[0]);
-}
+}*/
 /**
 
 Frees the memory allocated to a music file and closes the audio device.

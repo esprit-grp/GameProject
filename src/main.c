@@ -25,6 +25,7 @@
 #include "../include/settings.h" //settings header
 #include "../include/enemy.h"
 #include "../include/enigme_fichier.h"
+#include "../include/background.h"
 
 // screen
 SDL_Surface *screen;
@@ -32,7 +33,6 @@ SDL_Surface *screen;
 //* regular -> hovered -> clicked
 // images (_C for clicked) (_H for hovered)
 // main menu images
-image background;
 image gametitle;
 image playButton;
 image playButton_C;
@@ -64,7 +64,7 @@ image lvl1;
 // music
 Mix_Music *music;
 Mix_Chunk *clickFX;
-
+Mix_Music *lvl1music;
 // text
 text author;
 
@@ -74,6 +74,9 @@ enemy enemy2;
 
 // enigme
 Enigme e;
+
+//maps
+image otto;
 
 // logic
 SDL_Event event;
@@ -174,6 +177,9 @@ int main()
 
     // loading enigme
     genererEnigme(&e, "../assets/text/enigme.txt");
+    
+    //loading maps:
+    backgroundLoad_lvl1(&otto);
 
     // uint32 return time in milliseconds
     Uint32 last_time = SDL_GetTicks();
@@ -455,13 +461,13 @@ int main()
             break;
         case 2:
             // start (play) menu
-            SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 179, 254, 254)); // light blue
-            imageDraw_lvlmenutitle(screen, startMenuTitle);
-            imageDraw_lvl1(screen, lvl1);
+            backgroundDraw_lvl1(screen, &otto);
             imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
-
+            
+            
             drawEnemy(screen, enemy1);
             moveEnemy(&enemy1); //* moveEnemy will call animateEnemy
+            musicLoad1(lvl1music);
             //************
             drawEnemytest(screen, enemy2);
             moveEnemytest(&enemy2); //* moveEnemy will call animateEnemy
@@ -544,7 +550,6 @@ int main()
         }
     }
     // free memory
-    imageFree(background);
     imageFree(playButton);
     imageFree(playButton_C);
     imageFree(playButton_H);
