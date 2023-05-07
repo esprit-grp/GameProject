@@ -2,7 +2,7 @@
  * @file main.c
  * @brief the game loop code.
  * @author the KingsMan team
- * @version 0.3
+ * @version 0.4
  * @date Apr 23, 2023
  */
 // importing libraries
@@ -483,7 +483,7 @@ int main()
             drawEnemytest(screen, enemy2);
             moveEnemytest(&enemy2); //* moveEnemy will call animateEnemy
             //************
-            //! SAFWEN*************
+            //**************SAFWEN
             t_prev = SDL_GetTicks(); // au début de la boucle de jeu
 
             dt = 0;
@@ -497,105 +497,31 @@ int main()
             {
                 switch (event.key.keysym.sym)
                 {
-
-                /// crouch
-                case SDLK_DOWN:
-                    action = 1; /////9éme ligne du sprite sheet
-                    break;
-
-                /// jump
-                case SDLK_UP:
-                    action = 2; //////1ere ligne du sprit sheet
-                    if (jum == 0)
-                        p.posSprit.x = 0;
-
-                    while (jum < 5)
-                    {
-                        t_prev = SDL_GetTicks(); // au début de la boucle de jeu
-                        dt = 0;
-                        do
-                        {
-                            dt = SDL_GetTicks() - t_prev;
-                        } while (dt < 80);
-                        Saute(&p, action);
-                        animerPerso(action, &p);
-                        afficher_personnage(p, screen);
-                        jum++;
-                    }
-                    break;
-
-                /// attack
-                case SDLK_SPACE:
-                    action = 3;
-                    break;
-
-                /// walk right
                 case SDLK_RIGHT:
-                    action = 4; //////5eme ligne du sprit sheet
-
+                    action = 3; // walk right
                     break;
-
-                /// walk left
                 case SDLK_LEFT:
-                    action = 5; //////6eme ligne du sprit sheet
+                    action = 4; // walk left
                     break;
-
-                /// animation personnage attacké
-                case SDLK_a:
-                    action = 7;
-                    if (att == 0)
-                        p.posSprit.x = 0;
-                    while (att < 4)
-                    {
-                        t_prev = SDL_GetTicks(); // au début de la boucle de jeu
-                        dt = 0;
-                        do
-                        {
-                            dt = SDL_GetTicks() - t_prev;
-                        } while (dt < 40);
-                        vitesse_perso(&p, action, dt);
-                        deplacerPerso(&p, action, dt);
-                        animerPerso(action, &p);
-                        afficher_personnage(p, screen);
-                        att++;
-                    }
+                case SDLK_UP:
+                    action = 5; // jump right
                     break;
                 }
             }
 
             else if (event.type == SDL_QUIT)
             {
-                showperso = 1;
+                StopTheGame = 1;
                 break;
-            }
-            ////reduire la vitesse du joueur si aucune bouton n'est pressé ////
-
-            else if (event.type == SDL_KEYUP)
-            {
-                if ((event.key.keysym.sym == SDLK_RIGHT) && (p.sens == 1))
-                {
-                    if (retr < 3)
-                    {
-                        action = 6;
-                    }
-                }
-                if ((event.key.keysym.sym == SDLK_LEFT) && (p.sens == 0))
-                {
-                    if (retl < 3)
-                    {
-                        action = 8;
-                    }
-                }
             }
 
             vitesse_perso(&p, action, dt);
             deplacerPerso(&p, action, dt);
-            if (jum < 2)
-                animerPerso(action, &p);
+            animerPerso(action, &p);
             afficher_personnage(p, screen);
             mis_a_jour(&p, &action, &att, &jum, &retl, &retr);
             mis_a_jour(&p, &action, &att, &jum, &retl, &retr);
-            //! END*SAFWEN**********
+            // END*SAFWEN**********
             if (collisionBB(enemy1.img_pos, enemy2.img_pos) == 1 && collisionDetected == 0)
             {
                 printf(" collision detected \t");

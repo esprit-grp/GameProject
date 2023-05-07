@@ -40,7 +40,7 @@ void initPerso(personnage *p)
 {
 
 	p->sens = 1;
-	p->imgperso = IMG_Load("../assets/img/perso.png");
+	p->imgperso = IMG_Load("../assets/img/lime.png");
 	p->position_personnage.x = 350;
 	p->position_personnage.y = 350;
 
@@ -49,7 +49,7 @@ void initPerso(personnage *p)
 	p->vie = 3;
 	p->posSprit.x = 0;
 	p->posSprit.y = 200;
-	p->posSprit.w = 50;
+	p->posSprit.w = 100;
 	p->posSprit.h = 100;
 
 	p->up = 0;
@@ -90,144 +90,49 @@ void animerPerso(int action, personnage *p)
 	switch (action)
 	{
 
-	case 1:
-
-		p->posSprit.y = 1260;
-		if (p->crouch == 0)
-		{
-			p->posSprit.x = p->posSprit.x + 100;
-			if (p->posSprit.x >= 450)
-				p->posSprit.x = 450;
-		}
-		else
-		{
-			p->crouch = 1;
+	case 1: // idle right
+		p->posSprit.y = 0;
+		if (p->posSprit.x > 300)
 			p->posSprit.x = 0;
-		}
-		break;
-	case 2:
-		p->crouch = 0;
-		if (p->sens == 1)
-		{
-			p->posSprit.y = 150;
-
-			if (p->posSprit.x > 900)
-			{
-				p->posSprit.x = 0;
-			}
-			else
-				p->posSprit.x = p->posSprit.x + 100;
-		}
-		else if (p->sens == 0)
-		{
-
-			p->posSprit.y = 0;
-
-			if (p->posSprit.x > 900)
-			{
-				p->posSprit.x = 0;
-			}
-			else
-				p->posSprit.x = p->posSprit.x + 100;
-		}
-		break;
-
-	case 3:
-		p->crouch = 0;
-		if (p->sens == 1)
-		{
-
-			p->posSprit.y = 470;
-
-			if (p->posSprit.x > 1050)
-			{
-				p->posSprit.x = 0;
-			}
-			else
-				p->posSprit.x = p->posSprit.x + 100;
-		}
-		else if (p->sens == 0)
-		{
-			p->posSprit.y = 320;
-			if (p->posSprit.x > 1050)
-			{
-				p->posSprit.x = 0;
-			}
-			else
-				p->posSprit.x = p->posSprit.x + 100;
-		}
-		break;
-
-	case 4:
-		p->crouch = 0;
-		p->posSprit.y = 779;
-
-		if (p->posSprit.x >= 1200)
-		{
-			p->posSprit.x = 0;
-		}
 		else
-			p->posSprit.x = p->posSprit.x + 100;
+			p->posSprit.x += 100;
 		break;
-
-	case 5:
-		p->crouch = 0;
-		p->posSprit.y = 630;
-
-		if (p->posSprit.x >= 1200)
-		{
+	case 2: // idle left
+		p->posSprit.y = 100;
+		if (p->posSprit.x > 300)
 			p->posSprit.x = 0;
-		}
 		else
-			p->posSprit.x = p->posSprit.x + 100;
+			p->posSprit.x += 100;
 		break;
-
-	case 6:
-		p->posSprit.y = 779;
-		p->posSprit.x = 0;
+	case 3: // walk right
+		p->posSprit.y = 200;
+		if (p->posSprit.x > 300)
+			p->posSprit.x = 0;
+		else
+			p->posSprit.x += 100;
 		break;
-
-	case 8:
-		p->posSprit.y = 630;
-		p->posSprit.x = 0;
+	case 4: // walk left
+		p->posSprit.y = 300;
+		if (p->posSprit.x > 300)
+			p->posSprit.x = 0;
+		else
+			p->posSprit.x += 100;
 		break;
-
-	case 7:
-		p->crouch = 0;
-		if (p->sens == 1)
-		{
-			p->posSprit.y = 1420;
-
-			if (p->posSprit.x < 600)
-			{
-				p->posSprit.x = p->posSprit.x + 100;
-			}
-			else
-			{
-				p->vie--;
-				SDL_Delay(500);
-			}
-			if (p->posSprit.x >= 600)
-				p->posSprit.x = 0;
-		}
-
-		else if (p->sens == 0)
-		{
-
-			p->posSprit.y = 1570;
-
-			if (p->posSprit.x < 600)
-			{
-				p->posSprit.x = p->posSprit.x + 156;
-			}
-			else
-			{
-				p->vie--;
-				SDL_Delay(500);
-			}
-			if (p->posSprit.x >= 600)
-				p->posSprit.x = 0;
-		}
+	case 5: // jump right
+		p->posSprit.y = 400;
+		if (p->posSprit.x > 300)
+			p->posSprit.x = 0;
+		else
+			p->posSprit.x += 100;
+		p->position_personnage.y -= 5; // make character jump
+		break;
+	case 6: // jump left
+		p->posSprit.y = 500;
+		if (p->posSprit.x > 300)
+			p->posSprit.x = 0;
+		else
+			p->posSprit.x += 100;
+		p->position_personnage.y -= 5; // make character jump
 		break;
 	}
 }
@@ -240,19 +145,18 @@ void animerPerso(int action, personnage *p)
  */
 void deplacerPerso(personnage *p, int action, Uint32 dt)
 {
+	if ((action == 1) && (p->position_personnage.x < 800) && (p->vitesse >= 0))
+		p->position_personnage.x += (p->vitesse) * dt; // walk right
 
-	if ((action == 4) && (p->position_personnage.x < 800) && (p->vitesse >= 0))
-		p->position_personnage.x += (p->vitesse) * dt;
+	if ((action == 2) && (p->position_personnage.x > 30) && (p->vitesse >= 0))
+		p->position_personnage.x -= (p->vitesse) * dt; // walk left
 
-	if ((action == 5) && (p->position_personnage.x > 30) && (p->vitesse >= 0))
-		p->position_personnage.x -= (p->vitesse) * dt;
-
-	if ((action == 7) && (p->position_personnage.x > 30) && (p->position_personnage.x < 800) && (p->vitesse >= 0))
+	if ((action == 3 || action == 4) && (p->position_personnage.x > 30) && (p->position_personnage.x < 800) && (p->vitesse >= 0))
 	{
 		if (p->sens == 1)
-			p->position_personnage.x -= 30;
+			p->position_personnage.x -= 30; // jump right
 		if (p->sens == 0)
-			p->position_personnage.x += 30;
+			p->position_personnage.x += 30; // jump left
 	}
 }
 
@@ -322,14 +226,14 @@ void mis_a_jour(personnage *p, int *action, int *att, int *jum, int *retl, int *
 
 	switch (*action)
 	{
-	case 1:
+	case 1: // idle right
 		(*jum) = 0;
 		(*att) = 0;
 		(*retr) = 0;
 		(*retl) = 0;
 		break;
 
-	case 2:
+	case 2: // idle left
 		(*att) = 0;
 		(*retr) = 0;
 		(*retl) = 0;
@@ -337,7 +241,7 @@ void mis_a_jour(personnage *p, int *action, int *att, int *jum, int *retl, int *
 
 		break;
 
-	case 3:
+	case 3: // walk right
 		(*jum) = 0;
 		(*att) = 0;
 		(*retr) = 0;
@@ -345,7 +249,7 @@ void mis_a_jour(personnage *p, int *action, int *att, int *jum, int *retl, int *
 		(*action) = 0;
 		break;
 
-	case 4:
+	case 4: // walk left
 		(*jum) = 0;
 		(*att) = 0;
 		(*retr) = 0;
@@ -354,7 +258,7 @@ void mis_a_jour(personnage *p, int *action, int *att, int *jum, int *retl, int *
 
 		break;
 
-	case 5:
+	case 5: // jump right
 		(*jum) = 0;
 		(*att) = 0;
 		(*retr) = 0;
@@ -363,18 +267,18 @@ void mis_a_jour(personnage *p, int *action, int *att, int *jum, int *retl, int *
 
 		break;
 
-	case 7:
+	case 6: // jump left
 		(*jum) = 0;
 		(*retr) = 0;
 		(*retl) = 0;
 		(*action) = 0;
 		break;
 
-	case 6:
+	case 7: // crouch right
 		retr++;
 		break;
 
-	case 8:
+	case 8: // crouch left
 		retr--;
 		break;
 	}
