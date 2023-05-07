@@ -40,9 +40,9 @@ void initPerso(personnage *p)
 {
 
 	p->sens = 1;
-	p->imgperso = IMG_Load("/home/safwen/perso/perso.png");
-	p->position_personnage.x = 0;
-	p->position_personnage.y = 520;
+	p->imgperso = IMG_Load("../assets/img/perso.png");
+	p->position_personnage.x = 350;
+	p->position_personnage.y = 350;
 
 	p->crouch = 0;
 
@@ -256,17 +256,6 @@ void deplacerPerso(personnage *p, int action, Uint32 dt)
 	}
 }
 
-void init_bg(image *D)
-{
-	D->img = IMG_Load("/home/safwen/perso/back.png");
-	D->pos.x = 0;
-	D->pos.y = 0;
-}
-
-void afficher(image p, SDL_Surface *ecran)
-{
-	SDL_BlitSurface(p.img, NULL, ecran, &p.pos);
-}
 /**
  * @brief accelerating a perso.
  *
