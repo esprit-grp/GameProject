@@ -2,7 +2,7 @@
  * @file main.c
  * @brief the game loop code.
  * @author the KingsMan team
- * @version 0.3
+ * @version 0.4
  * @date Apr 23, 2023
  */
 // importing libraries
@@ -26,6 +26,7 @@
 #include "../include/enemy.h"
 #include "../include/enigme_fichier.h"
 #include "../include/background.h"
+#include "../include/perso.h"
 
 // screen
 SDL_Surface *screen;
@@ -71,6 +72,7 @@ text author;
 // characters
 enemy enemy1;
 enemy enemy2;
+personnage p;
 
 // enigme
 Enigme e;
@@ -91,6 +93,13 @@ int volume = 64;                  // volume of the music (0 - 128)
 bool muteButtonOn = false;        // mute button state
 static int collisionDetected = 0; // checks if collision detected
 static int enigmeDone = 0;        // checks if enigme is done
+// perso logic
+int showperso = 0;
+int action = 0, att = 0, jum = 0, retl = 0, retr = 0; // le variable retl nous aide a faire l'animation de retard a gauche
+SDL_Event event;
+SDL_Event event2;
+Uint32 dt, t_prev;
+
 /*
 ********************
 *****GAME BEGIN*****
@@ -180,6 +189,9 @@ int main()
 
     // loading maps:
     backgroundLoad_lvl1(&otto);
+
+    // init perso
+    initPerso(&p);
 
     // uint32 return time in milliseconds
     Uint32 last_time = SDL_GetTicks();
@@ -465,7 +477,7 @@ int main()
             imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
 
             drawEnemy(screen, enemy1);
-            moveEnemy(&enemy1); //* moveEnemy will call animateEnemy
+            updateEnemy(&enemy1, p.position_personnage);
             musicLoad1(lvl1music);
             //************
             drawEnemytest(screen, enemy2);
@@ -510,7 +522,7 @@ int main()
             mis_a_jour(&p, &action, &att, &jum, &retl, &retr);
             mis_a_jour(&p, &action, &att, &jum, &retl, &retr);
             // END*SAFWEN**********
-            if (collisionBB(enemy1.img_pos, enemy2.img_pos, &enemy1) == 1 && collisionDetected == 0)
+            if (collisionBB(enemy1.img_pos, enemy2.img_pos) == 1 && collisionDetected == 0)
             {
                 printf(" collision detected \t");
                 collisionDetected = 1;

@@ -1,3 +1,8 @@
+/**
+ * @file enemy.h
+ * @brief enemy header.
+ * @author Aymen Hmani
+ */
 #ifndef ENEMY_H
 #define ENEMY_H
 
@@ -7,17 +12,26 @@
  * The enemy structure contains information about the enemy's position, size, sprite image,
  * direction of movement, speed, maximum steps before changing direction, idle time, and grid position.
  */
+typedef enum
+{
+    WAITING,
+    FOLLOWING,
+    ATTACKING
+} state;
+
 typedef struct
 {
-    SDL_Rect img_pos;  //!< Position of the sprite on the screen.
-    SDL_Rect img_size; //!< Size of the sprite.
-    SDL_Surface *img;  //!< Pointer to the sprite image.
-    int direction;     //!< Direction of movement (0 for idle, 1 for right, 2 for left).
-    float speed;       //!< Steps per frame.
-    int max_steps;     //!< Maximum number of steps before changing direction.
-    int idle_time;     //!< Time when the enemy started idling.
-    int x;             //!< Position of the enemy in the grid (screen coordinates).
-    int y;             //!< Position of the enemy in the grid (screen coordinates).
+    SDL_Rect img_pos;     //!< Position of the sprite on the screen.
+    SDL_Rect img_size;    //!< Size of the sprite.
+    SDL_Surface *img;     //!< Pointer to the sprite image.
+    int direction;        //!< Direction of movement (0 for idle, 1 for right, 2 for left).
+    float speed;          //!< Steps per frame.
+    int max_steps;        //!< Maximum number of steps before changing direction.
+    int idle_time;        //!< Time when the enemy started idling.
+    int x;                //!< Position of the enemy in the grid (screen coordinates).
+    int y;                //!< Position of the enemy in the grid (screen coordinates).
+    states current_state; //!< Current state of the enemy.
+    int vision_range;     //!< Range of vision of the enemy.
 } enemy;
 
 /**
@@ -69,7 +83,32 @@ void moveEnemy(enemy *e);
  * @param enemy The bounding box of the enemy.
  * @return 1 if there is a collision, 0 otherwise.
  */
-int collisionBB(SDL_Rect player, SDL_Rect enemy);
+int collisionBB(SDL_Rect player, SDL_Rect enemyy, enemy *e);
+
+/**
+ * @brief Updates the state and position of an enemy based on the position of the player.
+ *
+ * @param e Pointer to the enemy to update.
+ * @param posPlayer SDL_Rect representing the position and size of the player.
+ */
+void updateEnemy(enemy *e, SDL_Rect posPlayer);
+
+/**
+ * @brief Calculates and returns the horizontal distance between two SDL_Rects.
+ *
+ * @param player The first SDL_Rect.
+ * @param enemy The second SDL_Rect.
+ * @return The horizontal distance between the two SDL_Rects.
+ */
+float distance(SDL_Rect player, SDL_Rect enemy);
+
+/**
+ * @brief Updates the state of an enemy based on the distance between the enemy and the player.
+ *
+ * @param e Pointer to the enemy to update.
+ * @param distEP The horizontal distance between the enemy and the player.
+ */
+void updateEnemyState(enemy *e, int distEP);
 
 //****************************************************
 
