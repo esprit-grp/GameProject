@@ -16,7 +16,7 @@ typedef enum
     WAITING,
     FOLLOWING,
     ATTACKING
-} state;
+} states;
 
 typedef struct
 {
