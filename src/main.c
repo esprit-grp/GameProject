@@ -522,7 +522,7 @@ int main()
             mis_a_jour(&p, &action, &att, &jum, &retl, &retr);
             mis_a_jour(&p, &action, &att, &jum, &retl, &retr);
             // END*SAFWEN**********
-            if (collisionBB(enemy1.img_pos, enemy2.img_pos) == 1 && collisionDetected == 0)
+            if (collisionBB(enemy1.img_pos, enemy2.img_pos, &enemy1) == 1 && collisionDetected == 0)
             {
                 printf(" collision detected \t");
                 collisionDetected = 1;
