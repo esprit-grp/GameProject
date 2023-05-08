@@ -477,7 +477,7 @@ int main()
             imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
 
             drawEnemy(screen, enemy1);
-            moveEnemy(&enemy1); //* moveEnemy will call animateEnemy
+            updateEnemy(&enemy1, p.position_personnage);
             musicLoad1(lvl1music);
             //************
             drawEnemytest(screen, enemy2);

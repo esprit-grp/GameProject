@@ -37,6 +37,9 @@ void initEnemy(enemy *e)
     e->img_size.h = (e->img->h) / 3; // (height of img / sprite frames) := 288/3= 96px
     e->img_pos.x = e->x;
     e->img_pos.y = e->y;
+
+    e->current_state = WAITING;
+    e->vision_range = 75;
 }
 
 /**
@@ -154,18 +157,85 @@ void moveEnemy(enemy *e)
  * @param enemy The bounding box of the enemy.
  * @return 1 if there is a collision, 0 otherwise.
  */
-int collisionBB(SDL_Rect player, SDL_Rect enemy)
+int collisionBB(SDL_Rect player, SDL_Rect enemyy, enemy *e)
 {
     int collision = 0;
-    if ((player.x + player.w < enemy.x) || (player.x > enemy.x + enemy.w) || (player.y + player.h < enemy.y) || (player.y > enemy.y + enemy.h))
+    if ((player.x + player.w < enemyy.x) || (player.x > enemyy.x + enemyy.w) || (player.y + player.h < enemyy.y) || (player.y > enemyy.y + enemyy.h))
     {
         collision = 0;
     }
     else
     {
         collision = 1;
+        e->current_state = ATTACKING; // Set the enemy's current_state to ATTACKING
     }
     return collision;
+}
+
+float distance(SDL_Rect player, SDL_Rect enemy)
+{
+    int distanceX = abs(enemy.x - player.x);
+    return distanceX;
+}
+
+void updateEnemyState(enemy *e, int distEP)
+{
+    if (distEP <= e->vision_range)
+    {
+        e->current_state = FOLLOWING;
+    }
+    else
+    {
+        e->current_state = WAITING;
+    }
+}
+
+void updateEnemy(enemy *e, SDL_Rect posPlayer)
+{
+    int distEP = distance(posPlayer, (SDL_Rect){e->img_pos.x, e->img_pos.y, e->img_size.w, e->img_size.h});
+    updateEnemyState(e, distEP);
+
+    switch (e->current_state)
+    {
+    case WAITING:
+        moveEnemy(e);
+        break;
+    case FOLLOWING:
+        if (distEP <= e->vision_range)
+        {
+            if (e->img_pos.x > posPlayer.x)
+            {
+                animateEnemy(e, 2);
+                e->img_pos.x -= e->speed;
+            }
+            else if (e->img_pos.x < posPlayer.x)
+            {
+                animateEnemy(e, 1);
+                e->img_pos.x += e->speed;
+            }
+        }
+        else
+        {
+            e->current_state = WAITING;
+        }
+        break;
+    case ATTACKING:
+        if (!collisionBB(posPlayer, (SDL_Rect){e->img_pos.x, e->img_pos.y, e->img_size.w, e->img_size.h}, e))
+        {
+            e->current_state = FOLLOWING;
+            break;
+        }
+        else
+        {
+            animateEnemy(e, 0);
+            e->current_state = WAITING;
+            e->img_pos.x = e->x;
+            e->direction = 0;
+            e->idle_time = SDL_GetTicks() + rand() % 1500 + 500;
+            moveEnemy(e);
+            break;
+        }
+    }
 }
 
 //**************TESTING FINCTIONS*****************

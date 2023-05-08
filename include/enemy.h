@@ -7,17 +7,26 @@
  * The enemy structure contains information about the enemy's position, size, sprite image,
  * direction of movement, speed, maximum steps before changing direction, idle time, and grid position.
  */
+typedef enum
+{
+    WAITING,
+    FOLLOWING,
+    ATTACKING
+} state;
+
 typedef struct
 {
-    SDL_Rect img_pos;  //!< Position of the sprite on the screen.
-    SDL_Rect img_size; //!< Size of the sprite.
-    SDL_Surface *img;  //!< Pointer to the sprite image.
-    int direction;     //!< Direction of movement (0 for idle, 1 for right, 2 for left).
-    float speed;       //!< Steps per frame.
-    int max_steps;     //!< Maximum number of steps before changing direction.
-    int idle_time;     //!< Time when the enemy started idling.
-    int x;             //!< Position of the enemy in the grid (screen coordinates).
-    int y;             //!< Position of the enemy in the grid (screen coordinates).
+    SDL_Rect img_pos;     //!< Position of the sprite on the screen.
+    SDL_Rect img_size;    //!< Size of the sprite.
+    SDL_Surface *img;     //!< Pointer to the sprite image.
+    int direction;        //!< Direction of movement (0 for idle, 1 for right, 2 for left).
+    float speed;          //!< Steps per frame.
+    int max_steps;        //!< Maximum number of steps before changing direction.
+    int idle_time;        //!< Time when the enemy started idling.
+    int x;                //!< Position of the enemy in the grid (screen coordinates).
+    int y;                //!< Position of the enemy in the grid (screen coordinates).
+    states current_state; //!< Current state of the enemy.
+    int vision_range;     //!< Range of vision of the enemy.
 } enemy;
 
 /**
@@ -69,7 +78,10 @@ void moveEnemy(enemy *e);
  * @param enemy The bounding box of the enemy.
  * @return 1 if there is a collision, 0 otherwise.
  */
-int collisionBB(SDL_Rect player, SDL_Rect enemy);
+int collisionBB(SDL_Rect player, SDL_Rect enemyy, enemy *e);
+void updateEnemy(enemy *e, SDL_Rect posPlayer);
+float distance(SDL_Rect player, SDL_Rect enemy);
+void updateEnemyState(enemy *e, int distEP);
 
 //****************************************************
 
