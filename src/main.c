@@ -75,7 +75,7 @@ enemy enemy2;
 // enigme
 Enigme e;
 
-//maps
+// maps
 image otto;
 
 // logic
@@ -177,8 +177,8 @@ int main()
 
     // loading enigme
     genererEnigme(&e, "../assets/text/enigme.txt");
-    
-    //loading maps:
+
+    // loading maps:
     backgroundLoad_lvl1(&otto);
 
     // uint32 return time in milliseconds
@@ -463,8 +463,7 @@ int main()
             // start (play) menu
             backgroundDraw_lvl1(screen, &otto);
             imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
-            
-            
+
             drawEnemy(screen, enemy1);
             moveEnemy(&enemy1); //* moveEnemy will call animateEnemy
             musicLoad1(lvl1music);
@@ -472,7 +471,46 @@ int main()
             drawEnemytest(screen, enemy2);
             moveEnemytest(&enemy2); //* moveEnemy will call animateEnemy
             //************
-            if (collisionBB(enemy1.img_pos, enemy2.img_pos) == 1 && collisionDetected == 0)
+            //**************SAFWEN
+            t_prev = SDL_GetTicks(); // au début de la boucle de jeu
+
+            dt = 0;
+            do
+            {
+                dt = SDL_GetTicks() - t_prev;
+            } while (dt < 50);
+
+            SDL_PollEvent(&event);
+            if (event.type == SDL_KEYDOWN)
+            {
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_RIGHT:
+                    action = 3; // walk right
+                    break;
+                case SDLK_LEFT:
+                    action = 4; // walk left
+                    break;
+                case SDLK_UP:
+                    action = 5; // jump right
+                    break;
+                }
+            }
+
+            else if (event.type == SDL_QUIT)
+            {
+                StopTheGame = 1;
+                break;
+            }
+
+            vitesse_perso(&p, action, dt);
+            deplacerPerso(&p, action, dt);
+            animerPerso(action, &p);
+            afficher_personnage(p, screen);
+            mis_a_jour(&p, &action, &att, &jum, &retl, &retr);
+            mis_a_jour(&p, &action, &att, &jum, &retl, &retr);
+            // END*SAFWEN**********
+            if (collisionBB(enemy1.img_pos, enemy2.img_pos, &enemy1) == 1 && collisionDetected == 0)
             {
                 printf(" collision detected \t");
                 collisionDetected = 1;
