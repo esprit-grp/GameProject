@@ -172,12 +172,25 @@ int collisionBB(SDL_Rect player, SDL_Rect enemyy, enemy *e)
     return collision;
 }
 
+/**
+ * Calculates the distance between two SDL_Rect objects based on their x-coordinates.
+ *
+ * @param player The SDL_Rect object representing the player's position.
+ * @param enemy The SDL_Rect object representing the enemy's position.
+ * @return The distance between the player and the enemy along the x-axis.
+ */
 float distance(SDL_Rect player, SDL_Rect enemy)
 {
     int distanceX = abs(enemy.x - player.x);
     return distanceX;
 }
 
+/**
+ * Updates the state of an enemy based on the distance between the enemy and the player.
+ *
+ * @param e A pointer to the enemy object to update.
+ * @param distEP The distance between the enemy and the player along the x-axis.
+ */
 void updateEnemyState(enemy *e, int distEP)
 {
     if (distEP <= e->vision_range)
@@ -190,6 +203,12 @@ void updateEnemyState(enemy *e, int distEP)
     }
 }
 
+/**
+ * Updates the position and behavior of an enemy based on the player's position and the enemy's state.
+ *
+ * @param e A pointer to the enemy object to update.
+ * @param posPlayer The SDL_Rect object representing the player's position.
+ */
 void updateEnemy(enemy *e, SDL_Rect posPlayer)
 {
     int distEP = distance(posPlayer, (SDL_Rect){e->img_pos.x, e->img_pos.y, e->img_size.w, e->img_size.h});
