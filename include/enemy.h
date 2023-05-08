@@ -1,11 +1,10 @@
+#ifndef ENEMY_H
+#define ENEMY_H
 /**
  * @file enemy.h
  * @brief enemy header.
  * @author Aymen Hmani
  */
-#ifndef ENEMY_H
-#define ENEMY_H
-
 /**
  * @brief Structure representing an enemy.
  *
