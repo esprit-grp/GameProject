@@ -20,7 +20,6 @@
 #include "constants.h"
 #include "menu.h"
 
-
 /**
 
 @brief The struct representing a background image in the game.
@@ -39,7 +38,6 @@ typedef struct
         char *filename;      /**< The filename of the image file. */
 } background;
 
-
 /**
 
 @struct ScoreInfo
@@ -48,8 +46,8 @@ typedef struct
 typedef struct
 {
         int score;
-         int temps;  
-         char playerName[20]; 
+        int temps;
+        char playerName[20];
 } ScoreInfo;
 /**
 
@@ -140,4 +138,16 @@ void bestScore(char *filename, ScoreInfo trois[]);
 @param t The array of ScoreInfo structs containing the top three scores.
 */
 void afficherBest(SDL_Surface *screen, ScoreInfo t[]);
+
+/**
+ * @brief Splits the screen into two halves and displays the given level on the left half.
+ *
+ * This function takes a pointer to the screen surface and a pointer to the level surface,
+ * splits the screen into two halves, and displays the level on the left half of the screen.
+ *
+ * @param screen A pointer to the SDL_Surface representing the game screen.
+ * @param level A pointer to the SDL_Surface representing the game level to display on the left half of the screen.
+ */
+void splitScreen(SDL_Surface *screen, SDL_Surface *level);
+
 #endif

@@ -30,6 +30,7 @@
 
 // screen
 SDL_Surface *screen;
+SDL_Surface *level = "../assets/img/otto.png";
 
 //* regular -> hovered -> clicked
 // images (_C for clicked) (_H for hovered)
@@ -93,6 +94,7 @@ int volume = 64;                  // volume of the music (0 - 128)
 bool muteButtonOn = false;        // mute button state
 static int collisionDetected = 0; // checks if collision detected
 static int enigmeDone = 0;        // checks if enigme is done
+bool isSplit = true;              // checks if the screen is split
 // perso logic
 int showperso = 0;
 int action = 0, att = 0, jum = 0, retl = 0, retr = 0; // le variable retl nous aide a faire l'animation de retard a gauche
@@ -472,8 +474,16 @@ int main()
             }
             break;
         case 2:
-            // start (play) menu
-            backgroundDraw_lvl1(screen, &otto);
+            // start lvl1
+            if (isSplit)
+            {
+                backgroundDraw_lvl1(screen, &otto);
+                splitScreen(screen, level);
+            }
+            else
+            {
+                backgroundDraw_lvl1(screen, &otto); // display the whole map
+            }
             imageDraw_backbutton(screen, backButton); //! used twice, but it's ok for now (universal fucntion)
 
             drawEnemy(screen, enemy1);
@@ -505,6 +515,9 @@ int main()
                     break;
                 case SDLK_UP:
                     action = 5; // jump right
+                    break;
+                case SDLK_x:
+                    isSplit = !isSplit; // toggle the value of isSplit
                     break;
                 }
             }

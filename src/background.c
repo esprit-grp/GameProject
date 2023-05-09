@@ -121,7 +121,7 @@ void backgroundLoad_lvl1(image *img)
  * @param[in,out] screen    Pointer to the screen surface
  * @param[in]   img
  */
- 
+
 /**
 
 Animates the level 1 background image on the screen.
@@ -276,4 +276,24 @@ void musicFree1(Mix_Music *music)
 {
     Mix_FreeMusic(music);
     Mix_CloseAudio();
+}
+
+/**
+ * @brief Splits the screen into two halves and displays the given level on both halves.
+ *
+ * This function takes a pointer to the screen surface and a pointer to the level surface,
+ * splits the screen into two halves, and displays the level on both halves of the screen.
+ *
+ * @param screen A pointer to the SDL_Surface representing the game screen.
+ * @param lvl A pointer to the SDL_Surface representing the game level to display on both halves of the screen.
+ *
+ * @return This function does not return a value.
+ */
+void splitScreen(SDL_Surface *screen, SDL_Surface *lvl)
+{
+    SDL_Rect leftHalf = {0, 0, screen->w / 2, screen->h};
+    SDL_Rect rightHalf = {screen->w / 2, 0, screen->w / 2, screen->h};
+    SDL_FillRect(screen, &leftHalf, SDL_MapRGB(screen->format, 0, 0, 255));
+    SDL_BlitSurface(lvl, NULL, screen, &rightHalf);
+    SDL_BlitSurface(lvl, NULL, screen, &leftHalf);
 }
