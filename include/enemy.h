@@ -1,23 +1,26 @@
-#ifndef ENEMY_H
-#define ENEMY_H
 /**
  * @file enemy.h
- * @brief enemy header.
+ * @brief Header file containing the definition of the enemy structure and functions for manipulating it.
  * @author Aymen Hmani
  */
+#ifndef ENEMY_H
+/**
+ * @brief Enumeration of states an enemy can be in.
+ */
+typedef enum
+{
+    WAITING,   //!< Enemy is idle.
+    FOLLOWING, //!< Enemy is following the player.
+    ATTACKING  //!< Enemy is attacking the player.
+} states;
+
 /**
  * @brief Structure representing an enemy.
  *
  * The enemy structure contains information about the enemy's position, size, sprite image,
- * direction of movement, speed, maximum steps before changing direction, idle time, and grid position.
+ * direction of movement, speed, maximum steps before changing direction, idle time, grid position,
+ * current state, and range of vision.
  */
-typedef enum
-{
-    WAITING,
-    FOLLOWING,
-    ATTACKING
-} states;
-
 typedef struct
 {
     SDL_Rect img_pos;     //!< Position of the sprite on the screen.
@@ -79,7 +82,8 @@ void moveEnemy(enemy *e);
  * It returns 1 if there is a collision, and 0 otherwise.
  *
  * @param player The bounding box of the player.
- * @param enemy The bounding box of the enemy.
+ * @param enemyy The bounding box of the enemy.
+ * @param e Pointer to the enemy structure.
  * @return 1 if there is a collision, 0 otherwise.
  */
 int collisionBB(SDL_Rect player, SDL_Rect enemyy, enemy *e);
